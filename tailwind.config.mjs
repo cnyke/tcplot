@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         'lexend': ['Lexend', 'sans-serif'],
+        'silkscreen': ['Silkscreen', 'cursive'],
       },
     },
   },
