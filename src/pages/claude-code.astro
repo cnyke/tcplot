@@ -50,10 +50,22 @@ import Layout from "../layouts/Layout.astro";
                 </li>
             </ul>
 
+            <blockquote class="border-l-4 border-gray-300 pl-6 mt-12 mb-12">
+                <p class="text-lg text-gray-600 leading-relaxed italic">
+                    "I don't know what the AI-enabled future looks like, but the last time I felt this excited by the potential for creating (almost) anything I could imagine was when I learned HTML as a teenager in the mid-90s.
+                </p>
+                <p class="text-lg text-gray-600 leading-relaxed italic mt-4">
+                    The ability to bring a visualization, dashboard, or analytic pipeline to life nearly instantaneously is a game-changer for conveying knowledge and insights. We still need humans to conceptualize these visualizations, dashboards, and pipelines so that they are meaningful and useful to others, but the technical barriers that have prevented us from telling maximally compelling stories with data have been massively reduced."
+                </p>
+                <p class="text-base text-gray-500 mt-3">
+                    —Julian Wolfson on LinkedIn
+                </p>
+            </blockquote>
+
             <h3 class="text-2xl font-semibold text-gray-900 mt-12 mb-3">
                 Dataset
             </h3>
-            <p class="text-lg text-gray-600 leading-relaxed">
+            <p class="text-lg text-gray-600 leading-relaxed mb-4">
                 &#x25B8; <a
                     href="https://www.transit.dot.gov/ntd/data-product/monthly-module-adjusted-data-release"
                     target="_blank"
@@ -62,6 +74,55 @@ import Layout from "../layouts/Layout.astro";
                     >NTD Monthly Module Adjusted Data Release</a
                 > — U.S. public transit ridership data from the Federal Transit Administration
             </p>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-3">
+                Download Data
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                Metro Transit ridership CSVs, ready to use:
+            </p>
+            <ul class="space-y-2 text-gray-600 mb-6">
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/Master-Table 1.csv" download class="text-blue-600 hover:underline">Master Table</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/UPT-Table 1.csv" download class="text-blue-600 hover:underline">UPT (Unlinked Passenger Trips)</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/UPT Estimates-Table 1.csv" download class="text-blue-600 hover:underline">UPT Estimates</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/Calendar Year UPT-Table 1.csv" download class="text-blue-600 hover:underline">Calendar Year UPT</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/VRM-Table 1.csv" download class="text-blue-600 hover:underline">VRM (Vehicle Revenue Miles)</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/VRM Estimates-Table 1.csv" download class="text-blue-600 hover:underline">VRM Estimates</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/Calendar Year VRM-Table 1.csv" download class="text-blue-600 hover:underline">Calendar Year VRM</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/VRH-Table 1.csv" download class="text-blue-600 hover:underline">VRH (Vehicle Revenue Hours)</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/VOMS-Table 1.csv" download class="text-blue-600 hover:underline">VOMS (Vehicles Operated in Max Service)</a>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <a href="/data/Read Me-Table 1.csv" download class="text-blue-600 hover:underline">Read Me</a>
+                </li>
+            </ul>
 
             <div class="flex justify-center mt-12">
                 <div class="max-w-2xl w-full rounded-lg overflow-hidden">
