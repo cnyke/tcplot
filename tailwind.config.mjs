@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'lexend': ['Lexend', 'sans-serif'],
+        'outfit': ['Outfit', 'sans-serif'],
         'silkscreen': ['Silkscreen', 'cursive'],
       },
     },
