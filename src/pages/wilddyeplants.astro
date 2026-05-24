@@ -1,0 +1,341 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="Wild Dye Plants | tcplot(Data Visualization Twin Cities)"
+    description="An interactive radial visualization of wild dye plants and the colors they produce."
+>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-4xl mx-auto mt-8 mb-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">
+                Wild Dye Plants
+            </h2>
+            <p class="text-lg text-gray-600 leading-relaxed mb-2">
+                Drag to spin. Hover for details.
+            </p>
+        </div>
+
+        <!-- Symbol Key -->
+        <div class="max-w-4xl mx-auto mb-4">
+            <div class="flex flex-wrap gap-4 text-sm text-gray-600" id="symbol-key">
+            </div>
+        </div>
+
+        <div id="viz" class="flex justify-center"></div>
+    </div>
+
+    <script is:inline src="https://d3js.org/d3.v7.min.js"></script>
+    <script is:inline>
+    (function() {
+        const partSymbols = {
+            'flower': '✿',
+            'flowers': '✿',
+            'fruit': '●',
+            'fruits': '●',
+            'berries': '●',
+            'leaves': '♠',
+            'red leaves': '♠',
+            'first year leaves': '♠',
+            'roots': '⌁',
+            'twigs': '╌',
+            'bark': '▮',
+            'stem': '│',
+            'stems': '│',
+            'whole plant': '❋',
+            'whole plant tops': '❋',
+            'tops': '❋',
+            'shoots': '↑',
+            'stalks': '│',
+            'hulls': '◐',
+            'skins': '◐',
+            'grounds': '◐',
+            'heartwood shavings': '▮',
+        };
+
+        const keyLabels = {
+            '✿': 'flower',
+            '●': 'fruit/berry',
+            '♠': 'leaves',
+            '⌁': 'roots',
+            '╌': 'twigs',
+            '▮': 'bark/wood',
+            '│': 'stem/stalk',
+            '❋': 'whole plant',
+            '↑': 'shoots',
+            '◐': 'hulls/skins',
+        };
+
+        // Build key
+        const keyEl = document.getElementById('symbol-key');
+        Object.entries(keyLabels).forEach(([sym, label]) => {
+            const span = document.createElement('span');
+            span.className = 'inline-flex items-center gap-1';
+            span.innerHTML = `<span class="text-lg">${sym}</span> ${label}`;
+            keyEl.appendChild(span);
+        });
+
+        function colorNameToHex(colorStr) {
+            if (!colorStr) return '#888888';
+            const c = colorStr.toLowerCase().split(',')[0].trim();
+            const map = {
+                'pink': '#e8829b',
+                'olive green': '#6b8e23',
+                'green': '#4a8c5c',
+                'blue-purple': '#7b68ee',
+                'yellow-green': '#8aab3a',
+                'yellow-gold': '#daa520',
+                'rose': '#c27085',
+                'bright yellow': '#edc531',
+                'dark charcoal': '#444444',
+                'gold': '#c8962e',
+                'purple-blue': '#6a5acd',
+                'orange': '#d2691e',
+                'red-orange': '#c44d2a',
+                'gold': '#c8962e',
+                'burnt orange': '#cc5500',
+                'yellow': '#c9a81e',
+                'grey-blue': '#708090',
+                'tan': '#c4a56e',
+                'teal-blue': '#2e8b8b',
+                'orange-tan': '#b8834a',
+                'red': '#b03030',
+                'grey-green': '#6e8b6e',
+                'yellow-gold': '#daa520',
+                'rust': '#b7410e',
+                'brown': '#7a5230',
+                'chartreuse yellow': '#9acd32',
+                'green-yellow': '#8aab3a',
+                'tan': '#c4a56e',
+                'olive': '#6b7b3a',
+                'bright yellow': '#edc531',
+                'dark olive': '#4a5530',
+                'blue': '#3a6ea5',
+                'light yellow': '#d4c56a',
+                'light grey': '#aaaaaa',
+                'grey': '#888888',
+                'pinkish brown': '#a07060',
+                'warm brown': '#8b6843',
+                'khaki': '#bdb76b',
+                'purple-grey': '#7a6a8a',
+                'lavender': '#967bb6',
+                'red-brown': '#8b4513',
+                'strong pink': '#c75b8f',
+            };
+            if (map[c]) return map[c];
+            // partial match
+            for (const [key, val] of Object.entries(map)) {
+                if (c.includes(key)) return val;
+            }
+            return '#888888';
+        }
+
+        function getSymbols(partsStr) {
+            if (!partsStr) return '';
+            const parts = partsStr.split(',').map(p => p.trim().toLowerCase());
+            const syms = [];
+            parts.forEach(p => {
+                if (partSymbols[p]) syms.push(partSymbols[p]);
+                else {
+                    // try partial match
+                    for (const [key, sym] of Object.entries(partSymbols)) {
+                        if (p.includes(key) || key.includes(p)) { syms.push(sym); break; }
+                    }
+                }
+            });
+            return [...new Set(syms)].join(' ');
+        }
+
+        function getShortName(name) {
+            // Remove parenthetical latin names for display
+            return name.replace(/\s*\([^)]*\)/g, '').trim();
+        }
+
+        const width = Math.min(900, window.innerWidth - 40);
+        const height = width;
+        const cx = width / 2;
+        const cy = height / 2;
+        const innerRadius = Math.min(width, height) * 0.15;
+        const outerRadius = Math.min(width, height) * 0.42;
+
+        const svg = d3.select('#viz')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .style('cursor', 'grab')
+            .style('user-select', 'none');
+
+        const tooltip = d3.select('#viz')
+            .append('div')
+            .style('position', 'absolute')
+            .style('background', 'white')
+            .style('border', '1px solid #ddd')
+            .style('border-radius', '8px')
+            .style('padding', '12px 16px')
+            .style('font-family', 'Lexend, sans-serif')
+            .style('font-size', '14px')
+            .style('line-height', '1.5')
+            .style('max-width', '320px')
+            .style('pointer-events', 'none')
+            .style('opacity', 0)
+            .style('z-index', 100)
+            .style('box-shadow', '0 4px 12px rgba(0,0,0,0.1)');
+
+        const g = svg.append('g')
+            .attr('transform', `translate(${cx},${cy})`);
+
+        // Center circle
+        g.append('circle')
+            .attr('r', innerRadius - 10)
+            .attr('fill', 'none')
+            .attr('stroke', '#e5e7eb')
+            .attr('stroke-width', 1.5);
+
+        let rotation = 0;
+
+        d3.csv('/data/wilddyeplants.csv').then(data => {
+            data = data.filter(d => d['Dye source'] && d['Dye source'].trim());
+
+            const n = data.length;
+            const angleStep = (2 * Math.PI) / n;
+
+            data.forEach((d, i) => {
+                const angle = i * angleStep - Math.PI / 2;
+                const color = colorNameToHex(d['Resulting color']);
+                const shortName = getShortName(d['Dye source']);
+                const symbols = getSymbols(d['Parts used']);
+
+                const lineGroup = g.append('g').attr('class', 'plant-ray');
+
+                // Radial line
+                const x1 = Math.cos(angle) * (innerRadius - 5);
+                const y1 = Math.sin(angle) * (innerRadius - 5);
+                const x2 = Math.cos(angle) * innerRadius;
+                const y2 = Math.sin(angle) * innerRadius;
+
+                lineGroup.append('line')
+                    .attr('x1', x1).attr('y1', y1)
+                    .attr('x2', x2).attr('y2', y2)
+                    .attr('stroke', color)
+                    .attr('stroke-width', 2)
+                    .attr('stroke-opacity', 0.5);
+
+                // Text
+                const textRadius = innerRadius + 5;
+                const tx = Math.cos(angle) * textRadius;
+                const ty = Math.sin(angle) * textRadius;
+                const angleDeg = (angle * 180 / Math.PI);
+
+                // Flip text on left side so it reads left-to-right
+                const flip = angleDeg > 90 || angleDeg < -90;
+                const textAnchor = flip ? 'end' : 'start';
+                const rotAngle = flip ? angleDeg + 180 : angleDeg;
+
+                const textEl = lineGroup.append('text')
+                    .attr('transform', `translate(${tx},${ty}) rotate(${rotAngle})`)
+                    .attr('text-anchor', textAnchor)
+                    .attr('dominant-baseline', 'middle')
+                    .attr('fill', color)
+                    .attr('font-size', Math.max(9, Math.min(12, width / 80)))
+                    .attr('font-family', 'Lexend, sans-serif')
+                    .attr('font-weight', 500);
+
+                if (flip) {
+                    textEl.text(`${symbols}  ${shortName}`);
+                } else {
+                    textEl.text(`${shortName}  ${symbols}`);
+                }
+
+                // Invisible wider hit area for hover
+                const hitRadius = innerRadius - 10;
+                const hx1 = Math.cos(angle) * hitRadius;
+                const hy1 = Math.sin(angle) * hitRadius;
+                const hx2 = Math.cos(angle) * (outerRadius + 20);
+                const hy2 = Math.sin(angle) * (outerRadius + 20);
+
+                lineGroup.append('line')
+                    .attr('x1', hx1).attr('y1', hy1)
+                    .attr('x2', hx2).attr('y2', hy2)
+                    .attr('stroke', 'transparent')
+                    .attr('stroke-width', 14)
+                    .style('cursor', 'pointer')
+                    .on('mouseover', function(event) {
+                        textEl.attr('font-weight', 700).attr('font-size', Math.max(11, Math.min(14, width / 65)));
+
+                        let html = `<strong style="color:${color}">${d['Dye source']}</strong><br>`;
+                        if (d['Parts used']) html += `<strong>Parts:</strong> ${d['Parts used']}<br>`;
+                        if (d['Resulting color']) html += `<strong>Color:</strong> ${d['Resulting color']}<br>`;
+                        if (d['Mordant']) html += `<strong>Mordant:</strong> ${d['Mordant']}<br>`;
+                        if (d['permenant color?']) html += `<strong>Permanent:</strong> ${d['permenant color?']}<br>`;
+                        if (d['Other notes']) html += `<div style="margin-top:4px;color:#666;font-style:italic">${d['Other notes']}</div>`;
+
+                        tooltip.html(html).style('opacity', 1);
+                    })
+                    .on('mousemove', function(event) {
+                        const vizRect = document.getElementById('viz').getBoundingClientRect();
+                        tooltip
+                            .style('left', (event.clientX - vizRect.left + 15) + 'px')
+                            .style('top', (event.clientY - vizRect.top - 10) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        textEl.attr('font-weight', 500).attr('font-size', Math.max(9, Math.min(12, width / 80)));
+                        tooltip.style('opacity', 0);
+                    });
+            });
+
+            // Drag to spin
+            let dragging = false;
+            let lastAngle = 0;
+
+            function getAngle(event) {
+                const rect = svg.node().getBoundingClientRect();
+                const x = event.clientX - rect.left - cx;
+                const y = event.clientY - rect.top - cy;
+                return Math.atan2(y, x);
+            }
+
+            svg.on('mousedown', function(event) {
+                if (event.target.tagName === 'line' && event.target.getAttribute('stroke') === 'transparent') return;
+                dragging = true;
+                lastAngle = getAngle(event);
+                svg.style('cursor', 'grabbing');
+            });
+
+            d3.select(window).on('mousemove.spin', function(event) {
+                if (!dragging) return;
+                const currentAngle = getAngle(event);
+                const delta = (currentAngle - lastAngle) * 180 / Math.PI;
+                rotation += delta;
+                g.attr('transform', `translate(${cx},${cy}) rotate(${rotation})`);
+                lastAngle = currentAngle;
+            });
+
+            d3.select(window).on('mouseup.spin', function() {
+                dragging = false;
+                svg.style('cursor', 'grab');
+            });
+
+            // Touch support
+            svg.on('touchstart', function(event) {
+                const touch = event.touches[0];
+                dragging = true;
+                lastAngle = getAngle(touch);
+            }, {passive: true});
+
+            d3.select(window).on('touchmove.spin', function(event) {
+                if (!dragging) return;
+                const touch = event.touches[0];
+                const currentAngle = getAngle(touch);
+                const delta = (currentAngle - lastAngle) * 180 / Math.PI;
+                rotation += delta;
+                g.attr('transform', `translate(${cx},${cy}) rotate(${rotation})`);
+                lastAngle = currentAngle;
+            }, {passive: true});
+
+            d3.select(window).on('touchend.spin', function() {
+                dragging = false;
+            });
+        });
+    })();
+    </script>
+</Layout>
