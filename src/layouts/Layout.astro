@@ -54,11 +54,11 @@ const socialImageURL = new URL(image, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body class="font-lexend bg-white text-gray-900 min-h-screen flex flex-col">
+  <body class="font-sans font-light bg-white text-gray-900 min-h-screen flex flex-col">
     <header
       class="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-200"
       style="z-index: 1000;"
@@ -69,10 +69,10 @@ const socialImageURL = new URL(image, Astro.site);
           <div class="flex-shrink-0">
             <a
               href="/"
-              class="text-xl font-lexend font-bold text-gray-900 hover:text-blue-600 transition-colors"
+              class="text-xl text-gray-900 hover:text-blue-600 transition-colors"
             >
-              <span class="hidden md:inline">tcplot: Data Visualization in Minneapolis and St. Paul</span>
-              <span class="md:hidden">tcplot</span>
+              <span class="font-silkscreen">tcplot</span>
+              <span class="hidden md:inline font-sans font-light"> Data Visualization in Minneapolis and St. Paul</span>
             </a>
           </div>
 
@@ -201,8 +201,9 @@ const socialImageURL = new URL(image, Astro.site);
       <div
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-500"
       >
-        <p class="font-medium text-gray-700 mb-2">
-          tcplot: Data Visualization in Minneapolis and St. Paul
+        <p class="text-gray-700 mb-2">
+          <span class="font-silkscreen">tcplot</span>
+          <span class="font-sans font-light"> Data Visualization in Minneapolis and St. Paul</span>
         </p>
         <div class="flex justify-center gap-6 mb-4">
           <a
