@@ -8,9 +8,33 @@ import Layout from "../layouts/Layout.astro";
 >
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="max-w-4xl mx-auto mt-8 mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
                 Upcoming: Data Physicalization Workshop — June 27th
             </h2>
+
+            <div class="mb-6 text-gray-700">
+                <p class="text-lg font-semibold text-gray-900">
+                    Saturday, Jun 27 · 10:00 AM to 12:00 PM CDT
+                </p>
+                <p class="flex items-start gap-2 mt-1">
+                    <svg
+                        class="w-5 h-5 mt-0.5 shrink-0 text-gray-400"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M12 2c-3.866 0-7 3.07-7 6.857 0 4.34 4.686 9.86 6.412 11.74a.8.8 0 0 0 1.176 0C14.314 18.717 19 13.197 19 8.857 19 5.07 15.866 2 12 2Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >The Coffee Shop NE</span
+                        ><br />2852 Johnson St NE · Minneapolis, MN</span
+                    >
+                </p>
+            </div>
 
             <div
                 class="w-full max-w-[300px] mx-auto mb-4 rounded-lg overflow-hidden sm:float-left sm:mx-0 sm:mr-8 sm:w-[300px]"
@@ -22,20 +46,21 @@ import Layout from "../layouts/Layout.astro";
                 />
             </div>
 
-            <p class="text-xl text-gray-600 leading-relaxed mb-4 italic">
+            <p class="text-xl text-gray-600 leading-relaxed mb-4">
                 What if your next chart wasn't on a screen?
             </p>
             <p class="text-lg text-gray-600 leading-relaxed mb-4">
-                Join <span class="font-silkscreen">tcplot</span> for a hands-on
-                morning of data physicalization — translating real datasets into
-                objects you can hold, turn over, and put on your desk. We'll
-                explore paper, thread, beads, and the surprisingly hard question
-                of what to encode when you can't reach for a library.
+                Join <span class="font-silkscreen">tcplot</span> for a hands-on morning
+                of data physicalization — translating real datasets into objects you
+                can hold, turn over, and put on your desk. We'll explore paper, thread,
+                beads, and the surprisingly hard question of what to encode when you
+                can't reach for a library.
             </p>
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
                 We'll draw inspiration from projects like Giorgia Lupi and
-                Stefanie Posavec's <em>Dear Data</em>, Nathalie Miebach's weather
-                sculptures, and the broader tradition of data physicalization (<a
+                Stefanie Posavec's <em>Dear Data</em>, Nathalie Miebach's
+                weather sculptures, and the broader tradition of data
+                physicalization (<a
                     href="https://dataphys.org"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -105,10 +130,25 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900"
                             >Welcome &amp; warm-up.</span
-                        > Coffee, quick intros, and a gallery walk through real
-                        examples — <em>Dear Data</em> postcards, Miebach's
-                        weather sculptures. We'll play one tiny encoding game to
-                        get the brain in physical mode.</span
+                        > Coffee, quick intros, and a gallery walk through real examples
+                        — <em>Dear Data</em> postcards, Miebach's weather sculptures.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Icebreaker.</span
+                        > Everyone picks a project from <a
+                            href="dataphys.org"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline"
+                            >dataphys.org</a
+                        >, spends a few minutes with it, then explains it to the
+                        group: what's the data, how is it encoded, and what
+                        makes it work? A quick way to meet each other and warm
+                        up the eye.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
@@ -116,26 +156,29 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900"
                             >Encoding without a library.</span
-                        > A short crash course in the physical vocabulary of
-                        data. On a screen you reach for <em>x</em>, <em>y</em>,
-                        color, and size — in your hands you have far more to work
-                        with: <strong>length</strong> (a strand of thread, a torn
-                        strip of paper), <strong>count</strong> (how many beads on
-                        a string), <strong>position</strong> and
+                        > A short crash course in the physical vocabulary of data.
+                        On a screen you reach for <em>x</em>, <em>y</em>, color,
+                        and size — in your hands you have far more to work with: <strong
+                            >length</strong
+                        > (a strand of thread, a torn strip of paper), <strong
+                            >count</strong
+                        > (how many beads on a string), <strong>position</strong
+                        > and
                         <strong>order</strong> (near/far, stacked, sequenced),
                         <strong>color</strong> and <strong>texture</strong>
                         (smooth vs. rough, matte vs. shiny),
-                        <strong>weight</strong>, <strong>height</strong>, and even
+                        <strong>weight</strong>, <strong>height</strong>, and
+                        even
                         <strong>negative space</strong> (the gaps that say as much
-                        as the marks). We'll talk about which channels the hand
-                        and eye read most easily, when an encoding is honest
-                        versus merely pretty, and the trade-off at the center of
-                        all of this: you can only encode a few variables before an
-                        object stops being legible, so choosing what to
-                        <em>leave out</em> is the real craft. Then I'll turn a
-                        single row of data into an object live — narrating each
-                        choice — so you can see the decisions in real time before
-                        you make your own.</span
+                        as the marks). We'll talk about which channels the hand and
+                        eye read most easily, when an encoding is honest versus merely
+                        pretty, and the trade-off at the center of all of this: you
+                        can only encode a few variables before an object stops being
+                        legible, so choosing what to
+                        <em>leave out</em> is the real craft. Then I'll turn a single
+                        row of data into an object live — narrating each choice —
+                        so you can see the decisions in real time before you make
+                        your own.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
@@ -153,8 +196,8 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900">Make.</span> The
                         heart of it — build your artifact, solo or in pairs. I'll
-                        circulate with prompts when you get stuck and more
-                        supplies when you get ambitious.</span
+                        circulate with prompts when you get stuck and more supplies
+                        when you get ambitious.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
@@ -162,17 +205,288 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900"
                             >Show &amp; tell.</span
-                        > Pass your object around the table. Tell us what you
-                        encoded, what you had to leave out, and what surprised you
-                        when the data became something you could hold.</span
+                        > Pass your object around the table. Tell us what you encoded,
+                        what you had to leave out, and what surprised you when the
+                        data became something you could hold.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
                     <span class="mt-1 text-gray-400">&#x25B8;</span>
                     <span
                         ><span class="font-semibold text-gray-900">Wrap.</span> A
-                        group photo of everything we made, a few pointers for
-                        going further, and you take your object home.</span
+                        group photo of everything we made, a few pointers for going
+                        further, and you take your object home.</span
+                    >
+                </li>
+            </ul>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Datasets to choose from
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                These are real, ready to use, and small enough to build in two
+                hours. They range in complexity — start simple or take on
+                something with more to juggle.
+            </p>
+
+            <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                Twin Cities weather — this week
+            </h4>
+            <p class="text-base text-gray-500 leading-relaxed mb-3">
+                The actual forecast for Minneapolis, the week starting Sunday.
+                Five days, several variables — a good medium-complexity pick.
+            </p>
+            <div class="overflow-x-auto mb-2">
+                <table class="w-full text-left text-gray-600 border-collapse">
+                    <thead>
+                        <tr
+                            class="border-b border-gray-300 text-sm uppercase tracking-wide text-gray-500"
+                        >
+                            <th class="py-2 pr-4 font-semibold">Day</th>
+                            <th class="py-2 pr-4 font-semibold">High °F</th>
+                            <th class="py-2 pr-4 font-semibold">Low °F</th>
+                            <th class="py-2 pr-4 font-semibold">Rain chance</th>
+                            <th class="py-2 font-semibold">Conditions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Sun, Jun 28</td>
+                            <td class="py-2 pr-4">89</td>
+                            <td class="py-2 pr-4">76</td>
+                            <td class="py-2 pr-4">57%</td>
+                            <td class="py-2"
+                                >Showers &amp; thunderstorms likely</td
+                            >
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Mon, Jun 29</td>
+                            <td class="py-2 pr-4">97</td>
+                            <td class="py-2 pr-4">76</td>
+                            <td class="py-2 pr-4">12%</td>
+                            <td class="py-2">Sunny</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Tue, Jun 30</td>
+                            <td class="py-2 pr-4">95</td>
+                            <td class="py-2 pr-4">72</td>
+                            <td class="py-2 pr-4">40%</td>
+                            <td class="py-2">Chance of storms</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Wed, Jul 1</td>
+                            <td class="py-2 pr-4">94</td>
+                            <td class="py-2 pr-4">73</td>
+                            <td class="py-2 pr-4">33%</td>
+                            <td class="py-2">Chance of storms</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Thu, Jul 2</td>
+                            <td class="py-2 pr-4">94</td>
+                            <td class="py-2 pr-4">73</td>
+                            <td class="py-2 pr-4">47%</td>
+                            <td class="py-2">Chance of storms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-sm text-gray-400 mb-8">
+                National Weather Service. (2026). <em
+                    >Point forecast for Minneapolis, MN (44.98°N, 93.27°W)</em
+                > [Data set]. National Oceanic and Atmospheric Administration. Retrieved
+                June 26, 2026, from <a
+                    href="https://api.weather.gov/gridpoints/MPX/108,72/forecast"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:underline"
+                    >https://api.weather.gov/gridpoints/MPX/108,72/forecast</a
+                >. The published forecast reaches Thursday; the weekend isn't
+                out yet.
+            </p>
+
+            <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                Minnesota bird sightings — spring
+            </h4>
+            <p class="text-base text-gray-500 leading-relaxed mb-3">
+                The most-reported birds across Minnesota this May and June. One
+                category, one number — the simplest place to start.
+            </p>
+            <div class="overflow-x-auto mb-2">
+                <table class="w-full text-left text-gray-600 border-collapse">
+                    <thead>
+                        <tr
+                            class="border-b border-gray-300 text-sm uppercase tracking-wide text-gray-500"
+                        >
+                            <th class="py-2 pr-4 font-semibold">Species</th>
+                            <th class="py-2 font-semibold">Observations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Red-winged Blackbird</td>
+                            <td class="py-2">319</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Mallard</td>
+                            <td class="py-2">284</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">American Robin</td>
+                            <td class="py-2">283</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Canada Goose</td>
+                            <td class="py-2">235</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Baltimore Oriole</td>
+                            <td class="py-2">194</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Yellow-rumped Warbler</td>
+                            <td class="py-2">192</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Rose-breasted Grosbeak</td>
+                            <td class="py-2">177</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Wild Turkey</td>
+                            <td class="py-2">153</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">Song Sparrow</td>
+                            <td class="py-2">142</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-2 pr-4">American Goldfinch</td>
+                            <td class="py-2">132</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-sm text-gray-400 mb-8">
+                GBIF.org. (2026). <em
+                    >Occurrence search: Aves (birds), Minnesota, United States,
+                    May–June 2026</em
+                > [Data set]. Global Biodiversity Information Facility. Retrieved
+                June 26, 2026, from <a
+                    href="https://www.gbif.org/occurrence/search?country=US&state_province=Minnesota&taxon_key=212&year=2026"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:underline"
+                    >https://www.gbif.org/occurrence/search</a
+                >. Counts are the number of recorded observations.
+            </p>
+
+            <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                Your own steps — from your phone
+            </h4>
+            <p class="text-base text-gray-500 leading-relaxed mb-8">
+                Open the health app on your phone (Apple Health, Google Fit,
+                Fitbit, whatever you carry) and read off the miles you walked
+                each day this past week. Seven numbers, completely your own —
+                ideal for a bracelet or a small loom.
+            </p>
+
+            <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                Library checkouts — bring your own
+            </h4>
+            <p class="text-base text-gray-500 leading-relaxed mb-8">
+                For a more complex challenge, pull a live slice of Twin Cities
+                library data from <a
+                    href="https://opendata.minneapolismn.gov/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:underline"
+                    >Minneapolis Open Data</a
+                > — checkouts by branch, item, or month carry several variables at
+                once, so you'll have to decide what to keep and what to drop.
+            </p>
+            <p class="text-sm text-gray-400 mb-8">
+                City of Minneapolis. (n.d.). <em>Minneapolis Open Data</em> [Data
+                portal]. Retrieved June 26, 2026, from <a
+                    href="https://opendata.minneapolismn.gov/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:underline"
+                    >https://opendata.minneapolismn.gov/</a
+                >.
+            </p>
+
+            <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                More fun datasets to download
+            </h4>
+            <p class="text-base text-gray-500 leading-relaxed mb-3">
+                Want something different? These are free CSVs, small enough to
+                encode by hand. The big ones — just grab a handful of rows or a
+                single season.
+            </p>
+            <ul class="space-y-3 text-gray-600 mb-8">
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><a
+                            href="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-02-21/bob_ross.csv"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline"
+                            >Bob Ross paintings</a
+                        > — the exact paint colors used in every episode of
+                        <em>The Joy of Painting</em>. A bead per color is almost
+                        too perfect; pick one season.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><a
+                            href="https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline"
+                            >Palmer Penguins</a
+                        > — bill, flipper, and body size for three Antarctic penguin
+                        species. Map a strip of paper to each flipper length; grab
+                        a handful of rows.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><a
+                            href="https://vincentarelbundock.github.io/Rdatasets/csv/datasets/mtcars.csv"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline">mtcars</a
+                        > — 32 classic cars by horsepower, weight, and fuel economy.
+                        A tidy, all-numeric set that bars and beads love.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><a
+                            href="https://vincentarelbundock.github.io/Rdatasets/csv/datasets/HairEyeColor.csv"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline"
+                            >Hair &amp; eye color</a
+                        > — counts of people by hair and eye color. A natural fit
+                        when the encoding is literally the color.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><a
+                            href="https://vincentarelbundock.github.io/Rdatasets/csv/datasets/anscombe.csv"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline"
+                            >Anscombe's quartet</a
+                        > — four tiny datasets with identical statistics but wildly
+                        different shapes. Build all four and feel the difference.</span
                     >
                 </li>
             </ul>
@@ -182,15 +496,15 @@ import Layout from "../layouts/Layout.astro";
             </h3>
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
                 Cardstock, embroidery thread, beads, tape, markers, making
-                supplies, datasets printed and ready to go.
+                supplies, datasets ready to go.
             </p>
 
             <h3 class="text-2xl font-semibold text-gray-900 mb-3">
                 Ideas to get you started
             </h3>
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                Not sure where to begin? Here are a few forms that translate data
-                especially well — but treat them as springboards, not
+                Not sure where to begin? Here are a few forms that translate
+                data especially well — but treat them as springboards, not
                 instructions.
             </p>
             <ul class="space-y-3 text-gray-600 mb-6">
@@ -200,9 +514,8 @@ import Layout from "../layouts/Layout.astro";
                         ><span class="font-semibold text-gray-900"
                             >Wire-and-bead jewelry.</span
                         > Thread a bracelet or necklace where each bead is a day,
-                        a row, or an event — color for category, size for
-                        magnitude, spacing for the gaps in between. You leave
-                        wearing your data.</span
+                        a row, or an event — color for category, size for magnitude,
+                        spacing for the gaps in between. You leave wearing your data.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
@@ -210,10 +523,10 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900"
                             >Altoid-tin looms.</span
-                        > Notch the lip of a tin, string a warp across it, and
-                        weave: let the colors of the weft rows encode one
-                        variable and the bands of the warp another. A whole
-                        woven dataset that snaps shut in your pocket.</span
+                        > Notch the lip of a tin, string a warp across it, and weave:
+                        let the colors of the weft rows encode one variable and the
+                        bands of the warp another. A whole woven dataset that snaps
+                        shut in your pocket.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
@@ -221,10 +534,9 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900"
                             >Layered paper topography.</span
-                        > Cut and stack cardstock contours so a value over time
-                        rises into a little 3D landscape — peaks for the highs,
-                        valleys for the lows, something you read with your
-                        fingertips.</span
+                        > Cut and stack cardstock contours so a value over time rises
+                        into a little 3D landscape — peaks for the highs, valleys
+                        for the lows, something you read with your fingertips.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
@@ -232,9 +544,9 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900"
                             >Hanging mobiles.</span
-                        > Suspend tagged elements from thread and let the piece
-                        find its own balance — arm length and height encode the
-                        numbers while gravity does the comparing for you.</span
+                        > Suspend tagged elements from thread and let the piece find
+                        its own balance — arm length and height encode the numbers
+                        while gravity does the comparing for you.</span
                     >
                 </li>
                 <li class="flex items-start gap-2">
@@ -242,10 +554,9 @@ import Layout from "../layouts/Layout.astro";
                     <span
                         ><span class="font-semibold text-gray-900"
                             >Punch-card strips.</span
-                        > Punch holes into a ribbon of cardstock, player-piano
-                        style — present or absent, more or fewer — so a week of
-                        yes/no data becomes a strip you can run through your
-                        hands.</span
+                        > Punch holes into a ribbon of cardstock, player-piano style
+                        — present or absent, more or fewer — so a week of yes/no data
+                        becomes a strip you can run through your hands.</span
                     >
                 </li>
             </ul>
@@ -282,8 +593,8 @@ import Layout from "../layouts/Layout.astro";
                         />
                     </div>
                     <p class="text-sm text-gray-400 mt-2 text-center italic">
-                        Still from <em>Project Hail Mary</em>. Dir. Phil Lord and
-                        Christopher Miller. Metro-Goldwyn-Mayer, 2026.
+                        Still from <em>Project Hail Mary</em>. Dir. Phil Lord
+                        and Christopher Miller. Metro-Goldwyn-Mayer, 2026.
                     </p>
                 </div>
             </div>
@@ -309,10 +620,10 @@ import Layout from "../layouts/Layout.astro";
                     >
                 </li>
                 <li>
-                    <span class="font-semibold text-gray-900">Dear Data</span> —
-                    Giorgia Lupi &amp; Stefanie Posavec. A year of weekly
-                    postcards in which two designers mailed each other hand-drawn
-                    visualizations of their everyday lives.
+                    <span class="font-semibold text-gray-900">Dear Data</span> — Giorgia
+                    Lupi &amp; Stefanie Posavec. A year of weekly postcards in which
+                    two designers mailed each other hand-drawn visualizations of their
+                    everyday lives.
                     <span class="block text-gray-500 mt-1"
                         >Why it's here: the founding text for slow, analog,
                         deeply personal data — proof that a chart can be made
@@ -321,9 +632,9 @@ import Layout from "../layouts/Layout.astro";
                 </li>
                 <li>
                     <span class="font-semibold text-gray-900">Speak Data</span> —
-                    Giorgia Lupi &amp; Phillip Cox. Conversations with artists,
-                    scientists, thinkers, and dreamers about how we live our
-                    lives in numbers, grounded in Lupi's idea of Data Humanism.
+                    Giorgia Lupi &amp; Phillip Cox. Conversations with artists, scientists,
+                    thinkers, and dreamers about how we live our lives in numbers,
+                    grounded in Lupi's idea of Data Humanism.
                     <span class="block text-gray-500 mt-1"
                         >Why it's here: it reframes data as something human and
                         felt rather than purely technical — the mindset behind
@@ -334,32 +645,30 @@ import Layout from "../layouts/Layout.astro";
                     <span class="font-semibold text-gray-900"
                         >Code as Creative Medium</span
                     > — Golan Levin &amp; Tega Brain. A handbook of exercises and
-                    assignments for teaching and learning creative coding and
-                    generative art.
+                    assignments for teaching and learning creative coding and generative
+                    art.
                     <span class="block text-gray-500 mt-1"
-                        >Why it's here: a deep well of generative, constraint-led
-                        prompts — many translate straight from screen to scissors
-                        and thread.</span
+                        >Why it's here: a deep well of generative,
+                        constraint-led prompts — many translate straight from
+                        screen to scissors and thread.</span
                     >
                 </li>
                 <li>
                     <span class="font-semibold text-gray-900"
                         >Beautiful Evidence</span
-                    > — Edward Tufte. On how evidence becomes argument:
-                    sparklines, mapped pictures, and the integrity of showing
-                    data honestly.
+                    > — Edward Tufte. On how evidence becomes argument: sparklines,
+                    mapped pictures, and the integrity of showing data honestly.
                     <span class="block text-gray-500 mt-1"
-                        >Why it's here: the discipline of encoding truthfully — a
-                        useful conscience when you're tempted to choose pretty
+                        >Why it's here: the discipline of encoding truthfully —
+                        a useful conscience when you're tempted to choose pretty
                         over honest.</span
                     >
                 </li>
                 <li>
                     <span class="font-semibold text-gray-900"
                         >Envisioning Information</span
-                    > — Edward Tufte. A classic on escaping flatland: layering,
-                    small multiples, and packing many dimensions into a clear
-                    image.
+                    > — Edward Tufte. A classic on escaping flatland: layering, small
+                    multiples, and packing many dimensions into a clear image.
                     <span class="block text-gray-500 mt-1"
                         >Why it's here: physical objects are inherently
                         multi-dimensional, and this is the master class in
@@ -369,8 +678,8 @@ import Layout from "../layouts/Layout.astro";
                 <li>
                     <span class="font-semibold text-gray-900"
                         >The Book of Circles</span
-                    > — Manuel Lima. A visual history of circular information
-                    design, from ancient diagrams to modern network graphics.
+                    > — Manuel Lima. A visual history of circular information design,
+                    from ancient diagrams to modern network graphics.
                     <span class="block text-gray-500 mt-1"
                         >Why it's here: a catalog of non-rectangular layouts to
                         steal from when a grid feels too obvious for your
@@ -380,26 +689,25 @@ import Layout from "../layouts/Layout.astro";
                 <li>
                     <span class="font-semibold text-gray-900"
                         >Nightingale, Issues 1–3</span
-                    > — the Data Visualization Society. The society's print
-                    journal, full of essays, interviews, and showcase work from
-                    across the dataviz field.
+                    > — the Data Visualization Society. The society's print journal,
+                    full of essays, interviews, and showcase work from across the
+                    dataviz field.
                     <span class="block text-gray-500 mt-1"
-                        >Why it's here: a snapshot of where the field is right now
-                        — community, debates, and plenty of fresh visual
+                        >Why it's here: a snapshot of where the field is right
+                        now — community, debates, and plenty of fresh visual
                         inspiration.</span
                     >
                 </li>
                 <li>
                     <span class="font-semibold text-gray-900"
                         >Value and Transformation of Corals</span
-                    > — Christine &amp; Margaret Wertheim. The catalog of the
-                    Crochet Coral Reef, a global craftivist project translating
-                    marine ecology — and hyperbolic geometry — into crocheted
-                    yarn.
+                    > — Christine &amp; Margaret Wertheim. The catalog of the Crochet
+                    Coral Reef, a global craftivist project translating marine ecology
+                    — and hyperbolic geometry — into crocheted yarn.
                     <span class="block text-gray-500 mt-1"
                         >Why it's here: the most ambitious example of data and
-                        science made physical by hand, at the scale of a movement
-                        — proof of how far this practice can go.</span
+                        science made physical by hand, at the scale of a
+                        movement — proof of how far this practice can go.</span
                     >
                 </li>
             </ul>
