@@ -15,8 +15,13 @@
  * scrubbing as you go.
  */
 (function () {
+  // Data is fetched once, before any p5 instance is created (see loadData /
+  // ensureSketch below). Relying on p5's preload() to populate it raced with
+  // setup() and intermittently left it undefined, so we load it ourselves.
+  let DATA = null;
+
   const sketch = (p) => {
-    let data, artists, MAXN, MINN, TOTAL;
+    let artists, MAXN, MINN, TOTAL;
 
     // layout
     const headerH = 64;
@@ -56,11 +61,8 @@
       48, 50, 52, 55, 57, 60, 62, 64, 67, 69, 72, 74, 76, 79, 81, 84,
     ]; // C major pentatonic, C3 → C6
 
-    p.preload = function () {
-      data = p.loadJSON("/music-library-artists.json");
-    };
-
     p.setup = function () {
+      if (!DATA || !DATA.artists) return;   // data must be loaded first
       const holder = document.getElementById("yiyd-canvas");
       const w = holder.clientWidth || 880;
       const cnv = p.createCanvas(w, H);
@@ -68,10 +70,10 @@
       p.colorMode(p.HSB, 360, 100, 100, 1);
       p.textFont("Helvetica");
 
-      artists = data.artists;
-      MAXN = data.max;
-      MINN = data.min;
-      TOTAL = data.total;
+      artists = DATA.artists;
+      MAXN = DATA.max;
+      MINN = DATA.min;
+      TOTAL = DATA.total;
 
       computeBars(w);
       wireControls();
@@ -374,6 +376,8 @@
 
   // ---- robust lifecycle: survive tab-switches, bfcache, and re-navigation ----
   let instance = null;
+  let building = false;
+  let dataPromise = null;
 
   const holder = () => document.getElementById("yiyd-canvas");
   const hasCanvas = () => {
@@ -381,13 +385,26 @@
     return h && h.querySelector("canvas");
   };
 
-  function ensureSketch() {
+  // fetch the dataset exactly once; reused across rebuilds
+  function loadData() {
+    if (!dataPromise) {
+      dataPromise = fetch("/music-library-artists.json")
+        .then((r) => {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
+        .catch((e) => { dataPromise = null; throw e; }); // allow retry
+    }
+    return dataPromise;
+  }
+
+  async function ensureSketch() {
     const h = holder();
     if (!h) return;                              // not on this page
     if (!window.p5) { setTimeout(ensureSketch, 60); return; }
 
     if (instance) {
-      // still initializing (preload/setup in flight) — leave it alone
+      // still initializing (setup in flight) — leave it alone
       if (!instance._yiydReady) return;
       if (hasCanvas()) {                         // alive — just repaint
         if (instance._yiydRepaint) instance._yiydRepaint();
@@ -398,7 +415,20 @@
       instance = null;
       h.innerHTML = "";
     }
+
+    if (building) return;                        // a build is already in flight
+    building = true;
+    try {
+      if (!DATA) DATA = await loadData();        // data ready before p5 starts
+    } catch (e) {
+      building = false;
+      setTimeout(ensureSketch, 300);             // network hiccup — retry
+      return;
+    }
+    // guard against state changing during the await
+    if (!holder() || instance) { building = false; return; }
     try { instance = new p5(sketch); } catch (e) { setTimeout(ensureSketch, 120); }
+    building = false;
   }
 
   // (re)initialize on every way a user can arrive at / return to the page
