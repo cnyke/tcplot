@@ -16,13 +16,363 @@ import Layout from "../layouts/Layout.astro";
                 I started <span class="font-silkscreen">tcplot</span> after deciding not to pursue a master's degree in data visualization. Instead of going back to school, I wanted to build something here at home: a data visualization community in Minneapolis for creative coders, analysts, and artists.
             </p>
 
+            <div
+                id="p5-playground"
+                class="relative w-full rounded-xl overflow-hidden shadow-lg ring-1 ring-black/10 cursor-pointer select-none bg-white"
+                style="touch-action: manipulation;"
+            >
+            </div>
+            <p class="mt-3 mb-6 text-sm text-gray-400 text-center italic">
+                click the scene to launch a firework
+            </p>
+
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
                 <span class="font-silkscreen">tcplot</span> is a place to learn from one another, share work in progress, and explore what's possible when data, code, and craft come together. Whether you make charts for a living, write code for fun, or work with data as a medium for art, you're welcome here.
             </p>
 
-            <p class="text-lg text-gray-600 leading-relaxed">
+            <p class="text-lg text-gray-600 leading-relaxed mb-10">
                 Come to an <a href="https://www.meetup.com/tcplot/?eventOrigin=home_groups_you_organize" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">event</a>, follow along on <a href="https://www.instagram.com/tcplot/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Instagram</a>, or reach out at <a href="mailto:clairenyquist@gmail.com" class="text-blue-600 hover:underline">clairenyquist@gmail.com</a>.
             </p>
         </div>
     </div>
+
+    <script is:inline src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
+    <script is:inline>
+        (function () {
+            const mount = document.getElementById("p5-playground");
+            if (!mount || typeof window.p5 === "undefined") return;
+
+            const sketch = (p) => {
+                let W, H;
+                let fireworks = [];
+                let drips = [];
+                let splashes = [];
+                let puddles = [];
+                let geckos = [];
+                let nextFirework = 0;
+                let nextDrip = 0;
+
+                const rand = (a, b) => p.random(a, b);
+
+                function sizeToContainer() {
+                    W = mount.clientWidth || 640;
+                    H = Math.max(340, Math.min(500, Math.round(window.innerHeight * 0.6)));
+                }
+
+                // ---------- Fireworks ----------
+                class Particle {
+                    constructor(x, y, hue) {
+                        const ang = rand(0, p.TWO_PI);
+                        const spd = rand(1, 7);
+                        this.x = x; this.y = y;
+                        this.vx = Math.cos(ang) * spd;
+                        this.vy = Math.sin(ang) * spd;
+                        this.hue = hue + rand(-12, 12);
+                        this.life = 1;
+                        this.decay = rand(0.012, 0.03);
+                    }
+                    update() {
+                        this.vx *= 0.96; this.vy *= 0.96;
+                        this.vy += 0.06; // gravity
+                        this.x += this.vx; this.y += this.vy;
+                        this.life -= this.decay;
+                    }
+                    draw() {
+                        p.noStroke();
+                        const c = p.color(this.hue, 90, 100, this.life);
+                        p.drawingContext.shadowBlur = 14;
+                        p.drawingContext.shadowColor = c.toString();
+                        p.fill(c);
+                        p.circle(this.x, this.y, 3.5);
+                    }
+                    get dead() { return this.life <= 0; }
+                }
+
+                class Firework {
+                    constructor(x) {
+                        this.x = x === undefined ? rand(W * 0.1, W * 0.9) : x;
+                        this.y = H;
+                        this.vx = rand(-1.2, 1.2);
+                        this.vy = rand(-13, -9);
+                        this.hue = rand(0, 360);
+                        this.exploded = false;
+                        this.parts = [];
+                    }
+                    update() {
+                        if (!this.exploded) {
+                            this.vy += 0.16;
+                            this.x += this.vx; this.y += this.vy;
+                            if (this.vy >= -1) this.explode();
+                        }
+                        for (const pt of this.parts) pt.update();
+                        this.parts = this.parts.filter((pt) => !pt.dead);
+                    }
+                    explode() {
+                        this.exploded = true;
+                        const n = Math.floor(rand(50, 90));
+                        for (let i = 0; i < n; i++) this.parts.push(new Particle(this.x, this.y, this.hue));
+                    }
+                    draw() {
+                        if (!this.exploded) {
+                            p.noStroke();
+                            const c = p.color(this.hue, 60, 100, 1);
+                            p.drawingContext.shadowBlur = 12;
+                            p.drawingContext.shadowColor = c.toString();
+                            p.fill(c);
+                            p.circle(this.x, this.y, 4);
+                        }
+                        for (const pt of this.parts) pt.draw();
+                    }
+                    get dead() { return this.exploded && this.parts.length === 0; }
+                }
+
+                // ---------- Drips ----------
+                class Drip {
+                    constructor() {
+                        this.x = rand(20, W - 20);
+                        this.y = -10;
+                        this.vy = rand(0.6, 1.6);
+                        this.hue = rand(0, 360);
+                        this.r = rand(4, 7);
+                        this.floor = H - rand(4, 16);
+                        this.landed = false;
+                    }
+                    update() {
+                        this.vy += 0.14;
+                        this.y += this.vy;
+                        if (this.y >= this.floor && !this.landed) {
+                            this.landed = true;
+                            const n = Math.floor(rand(5, 9));
+                            for (let i = 0; i < n; i++) splashes.push(new Splash(this.x, this.floor, this.hue));
+                            puddles.push(new Puddle(this.x, this.floor, this.hue));
+                        }
+                    }
+                    draw() {
+                        const c = p.color(this.hue, 80, 100, 1);
+                        p.noStroke();
+                        p.drawingContext.shadowBlur = 10;
+                        p.drawingContext.shadowColor = c.toString();
+                        p.fill(c);
+                        const tail = p.constrain(this.vy * 2.4, 6, 40);
+                        // teardrop: a stretched tail plus a round head
+                        p.beginShape();
+                        p.vertex(this.x, this.y - tail);
+                        p.bezierVertex(this.x - this.r, this.y - tail * 0.3, this.x - this.r, this.y, this.x, this.y + this.r);
+                        p.bezierVertex(this.x + this.r, this.y, this.x + this.r, this.y - tail * 0.3, this.x, this.y - tail);
+                        p.endShape(p.CLOSE);
+                    }
+                    get dead() { return this.landed; }
+                }
+
+                class Splash {
+                    constructor(x, y, hue) {
+                        const ang = rand(-p.PI, 0);
+                        const spd = rand(1, 4);
+                        this.x = x; this.y = y;
+                        this.vx = Math.cos(ang) * spd;
+                        this.vy = Math.sin(ang) * spd * 1.2;
+                        this.hue = hue;
+                        this.life = 1;
+                        this.r = rand(2, 4);
+                    }
+                    update() {
+                        this.vy += 0.22;
+                        this.x += this.vx; this.y += this.vy;
+                        this.life -= 0.04;
+                    }
+                    draw() {
+                        p.noStroke();
+                        p.drawingContext.shadowBlur = 6;
+                        const c = p.color(this.hue, 80, 100, this.life);
+                        p.drawingContext.shadowColor = c.toString();
+                        p.fill(c);
+                        p.circle(this.x, this.y, this.r);
+                    }
+                    get dead() { return this.life <= 0; }
+                }
+
+                class Puddle {
+                    constructor(x, y, hue) {
+                        this.x = x; this.y = y; this.hue = hue;
+                        this.w = rand(8, 14); this.maxW = this.w + rand(14, 30);
+                        this.life = 1;
+                    }
+                    update() {
+                        this.w = p.lerp(this.w, this.maxW, 0.05);
+                        this.life -= 0.006;
+                    }
+                    draw() {
+                        p.noStroke();
+                        p.drawingContext.shadowBlur = 0;
+                        p.fill(p.color(this.hue, 80, 95, this.life * 0.8));
+                        p.ellipse(this.x, this.y, this.w, this.w * 0.32);
+                    }
+                    get dead() { return this.life <= 0; }
+                }
+
+                // ---------- Geckos ----------
+                class Gecko {
+                    constructor() {
+                        this.x = rand(0, W); this.y = rand(0, H);
+                        this.angle = rand(0, p.TWO_PI);
+                        this.speed = rand(0.9, 1.7);
+                        this.t = rand(0, 1000);
+                        this.nseed = rand(0, 1000);
+                        this.scale = rand(0.8, 1.3);
+                        this.hue = rand(95, 150);
+                        this.n = 12;
+                        this.segLen = 8 * this.scale;
+                        this.pts = [];
+                        for (let i = 0; i <= this.n; i++) this.pts.push({ x: this.x, y: this.y + i * this.segLen });
+                        this.tongue = 0;
+                        this.tongueTimer = rand(80, 200);
+                    }
+                    shift(dx, dy) {
+                        this.x += dx; this.y += dy;
+                        for (const pt of this.pts) { pt.x += dx; pt.y += dy; }
+                    }
+                    update() {
+                        this.t += 0.02;
+                        const steer = (p.noise(this.nseed, this.t * 0.5) - 0.5) * 0.34;
+                        this.angle += steer;
+                        const wiggle = Math.sin(this.t * 7) * 0.28; // slither
+                        const heading = this.angle + wiggle;
+                        this.x += Math.cos(heading) * this.speed;
+                        this.y += Math.sin(heading) * this.speed;
+
+                        const m = 30;
+                        if (this.x < -m) this.shift(W + 2 * m, 0);
+                        if (this.x > W + m) this.shift(-(W + 2 * m), 0);
+                        if (this.y < -m) this.shift(0, H + 2 * m);
+                        if (this.y > H + m) this.shift(0, -(H + 2 * m));
+
+                        // follow-the-leader spine
+                        this.pts[0].x = this.x; this.pts[0].y = this.y;
+                        for (let i = 1; i <= this.n; i++) {
+                            const a = this.pts[i - 1], b = this.pts[i];
+                            let dx = b.x - a.x, dy = b.y - a.y;
+                            const d = Math.hypot(dx, dy) || 0.0001;
+                            dx /= d; dy /= d;
+                            b.x = a.x + dx * this.segLen;
+                            b.y = a.y + dy * this.segLen;
+                        }
+
+                        if (--this.tongueTimer <= 0) { this.tongue = 8; this.tongueTimer = rand(120, 280); }
+                        if (this.tongue > 0) this.tongue--;
+                    }
+                    legPair(idx, phase) {
+                        const a = this.pts[idx - 1], b = this.pts[idx + 1] || this.pts[idx];
+                        let hx = b.x - a.x, hy = b.y - a.y;
+                        const d = Math.hypot(hx, hy) || 0.0001; hx /= d; hy /= d;
+                        const px = -hy, py = hx; // perpendicular
+                        const c = this.pts[idx];
+                        const swing = Math.sin(this.t * 8 + phase) * 4 * this.scale;
+                        const len = 9 * this.scale;
+                        for (const side of [1, -1]) {
+                            const fx = c.x + px * side * len + hx * swing;
+                            const fy = c.y + py * side * len + hy * swing;
+                            const kx = c.x + px * side * len * 0.5;
+                            const ky = c.y + py * side * len * 0.5;
+                            p.line(c.x, c.y, kx, ky);
+                            p.line(kx, ky, fx, fy);
+                        }
+                    }
+                    draw() {
+                        p.drawingContext.shadowBlur = 12;
+                        p.drawingContext.shadowColor = p.color(this.hue, 80, 90, 1).toString();
+
+                        // legs
+                        p.stroke(this.hue, 70, 80, 0.9);
+                        p.strokeWeight(2.2 * this.scale);
+                        this.legPair(3, 0);
+                        this.legPair(7, p.PI);
+
+                        // body (tail -> head), tapering circles
+                        p.noStroke();
+                        for (let i = this.n; i >= 0; i--) {
+                            const r = p.map(i, 0, this.n, 9, 2) * this.scale;
+                            const b = p.map(i, 0, this.n, 95, 65);
+                            p.fill(this.hue, 75, b, 1);
+                            p.circle(this.pts[i].x, this.pts[i].y, r * 2);
+                        }
+
+                        // head details
+                        const head = this.pts[0], nk = this.pts[1];
+                        let hx = head.x - nk.x, hy = head.y - nk.y;
+                        const d = Math.hypot(hx, hy) || 0.0001; hx /= d; hy /= d;
+                        const px = -hy, py = hx;
+
+                        // tongue
+                        if (this.tongue > 0) {
+                            p.stroke(350, 90, 100, 1);
+                            p.strokeWeight(1.6 * this.scale);
+                            const tl = 10 * this.scale;
+                            const tx = head.x + hx * tl, ty = head.y + hy * tl;
+                            p.line(head.x + hx * 6, head.y + hy * 6, tx, ty);
+                            p.line(tx, ty, tx + px * 2 + hx * 2, ty + py * 2 + hy * 2);
+                            p.line(tx, ty, tx - px * 2 + hx * 2, ty - py * 2 + hy * 2);
+                        }
+
+                    }
+                }
+
+                // ---------- Sketch lifecycle ----------
+                p.setup = () => {
+                    sizeToContainer();
+                    const cnv = p.createCanvas(W, H);
+                    cnv.parent(mount);
+                    p.colorMode(p.HSB, 360, 100, 100, 1);
+                    for (let i = 0; i < 4; i++) geckos.push(new Gecko());
+                    nextFirework = 40;
+                    nextDrip = 30;
+                };
+
+                p.windowResized = () => {
+                    sizeToContainer();
+                    p.resizeCanvas(W, H);
+                };
+
+                p.draw = () => {
+                    p.background(0, 0, 100, 0.25); // white w/ motion trails
+
+                    // spawn timers
+                    if (--nextFirework <= 0 && fireworks.length < 6) {
+                        fireworks.push(new Firework());
+                        nextFirework = Math.floor(rand(60, 150));
+                    }
+                    if (--nextDrip <= 0 && drips.length < 14) {
+                        drips.push(new Drip());
+                        nextDrip = Math.floor(rand(25, 70));
+                    }
+
+                    // puddles (drawn first, on the floor)
+                    for (const o of puddles) { o.update(); o.draw(); }
+                    puddles = puddles.filter((o) => !o.dead);
+
+                    // geckos
+                    for (const g of geckos) { g.update(); g.draw(); }
+
+                    // drips + splashes
+                    for (const o of drips) { o.update(); o.draw(); }
+                    drips = drips.filter((o) => !o.dead);
+                    for (const o of splashes) { o.update(); o.draw(); }
+                    splashes = splashes.filter((o) => !o.dead);
+
+                    // fireworks (on top)
+                    for (const f of fireworks) { f.update(); f.draw(); }
+                    fireworks = fireworks.filter((f) => !f.dead);
+
+                    p.drawingContext.shadowBlur = 0;
+                };
+
+                p.mousePressed = () => {
+                    if (p.mouseX >= 0 && p.mouseX <= W && p.mouseY >= 0 && p.mouseY <= H) {
+                        fireworks.push(new Firework(p.mouseX));
+                    }
+                };
+            };
+
+            new window.p5(sketch);
+        })();
+    </script>
 </Layout>
