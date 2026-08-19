@@ -1,0 +1,343 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="Mapathon: All About Maps | tcplot: Data Visualization in Minneapolis and St. Paul"
+    description="Bring a map you love, then build one together — from MapLibre and QGIS to hand-drawn cartography — and present what you made."
+>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-4xl mx-auto mt-8 mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                Upcoming: Mapathon — All About Maps
+            </h2>
+
+            <div class="mb-6 text-gray-700">
+                <p class="text-lg font-semibold text-gray-900">
+                    Saturday, Oct 24 · 10:00 AM to 12:00 PM CDT
+                </p>
+                <p class="flex items-start gap-2 mt-1">
+                    <svg
+                        class="w-5 h-5 mt-0.5 shrink-0 text-gray-400"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M12 2c-3.866 0-7 3.07-7 6.857 0 4.34 4.686 9.86 6.412 11.74a.8.8 0 0 0 1.176 0C14.314 18.717 19 13.197 19 8.857 19 5.07 15.866 2 12 2Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >The Coffee Shop NE</span
+                        ><br />2852 Johnson St NE · Minneapolis, MN</span
+                    >
+                </p>
+            </div>
+
+            <p class="text-xl text-gray-600 leading-relaxed mb-4">
+                Every map is a chart with a place in it.
+            </p>
+            <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                Join <span class="font-silkscreen">tcplot</span> for a morning devoted
+                entirely to maps. First, everyone brings one map they love and gives
+                it a two-minute show-and-tell; then we open the laptops and build
+                maps of our own, ending with a round of presentations.
+            </p>
+
+            <div class="flex justify-center mt-12 mb-8">
+                <div class="max-w-2xl w-full">
+                    <div class="rounded-lg overflow-hidden">
+                        <img
+                            src="/images/meiji-japan-prefecture-map-1870s.jpg"
+                            alt="A Meiji-era outline map of Japan with prefectures hand-tinted in soft green, orange, yellow, and purple"
+                            class="w-full h-auto object-contain"
+                        />
+                    </div>
+                    <p class="text-sm text-gray-500 leading-relaxed mt-2">
+                        A Meiji-era outline map of Japan (大日本暗射地図,
+                        1870s), the newly drawn prefectures hand-tinted in
+                        watercolor.
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Act one: bring a map
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                Your ticket in is one map, any map, and two minutes on why it's
+                great or terrible. For example:
+            </p>
+            <ul class="space-y-3 text-gray-600 mb-8">
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >A classic — Minard, Snow's cholera map, a du Bois
+                        plate, a favorite USGS quad</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >Something interactive you keep going back to — a
+                        transit map, a wind map, a snow-depth map you check
+                        every winter</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >A paper map with a history — the state park map from
+                        the glovebox, a hand-me-down atlas page</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >Something you made yourself, at any level of finish</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >A bad map you love to hate — misleading choropleth,
+                        crime against projections, 3D pie chart on a globe</span
+                    >
+                </li>
+            </ul>
+
+            <div class="flex justify-center mt-12 mb-8">
+                <div class="max-w-2xl w-full">
+                    <div class="rounded-lg overflow-hidden">
+                        <img
+                            src="/images/mercator-hondius-1606-north-pole.jpg"
+                            alt="Gerardus Mercator's 1606 map of the Arctic, showing an invented polar continent divided by four rivers, ringed by ornate gold scrollwork"
+                            class="w-full h-auto object-contain"
+                        />
+                    </div>
+                    <p class="text-sm text-gray-500 leading-relaxed mt-2">
+                        Gerardus Mercator's <em
+                            >Septentrionalium Terrarum descriptio</em
+                        > (1606 Hondius edition), the first printed map devoted to
+                        the North Pole. The polar continent, its four rivers, and
+                        the magnetic mountain at the center are entirely invented
+                        — a masterpiece of confident wrongness, and the patron saint
+                        of "bring a bad map you love."
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Act two: build together
+            </h3>
+            <ul class="space-y-3 text-gray-600 mb-8">
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Tooling primer.</span
+                        > A short walk through the modern mapping stack and the local
+                        data sources below, so nobody spends the build hour googling
+                        "how to make a map."</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Build session.</span
+                        > Solo or in small groups, make a map — of your neighborhood,
+                        your commute, the Twin Cities, anywhere. Code, GIS, or pen
+                        and paper all count. AI assistants welcome. They're good at
+                        GeoJSON plumbing.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Present.</span
+                        > Show what you made, however far you got.</span
+                    >
+                </li>
+            </ul>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                The mapping stack, briefly
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                Pick a lane based on how you like to work.
+            </p>
+            <ul class="space-y-3 text-gray-600 mb-8">
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Fast and no-code:</span
+                        > Datawrapper and Felt make a clean choropleth or pin map
+                        in minutes; kepler.gl eats a CSV of points and gives you something
+                        gorgeous back.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Web code:</span
+                        > Leaflet for the friendly classic, MapLibre GL for vector
+                        tiles and smooth zooms, deck.gl when you have a hundred thousand
+                        points, D3 when you want full control of the projection.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Analysis-first:</span
+                        > QGIS (free, deep, desktop) or Python's GeoPandas + Folium
+                        if your map starts life as a dataframe.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900">Analog:</span
+                        > Hand-drawn cartography is a real and honorable lane — the
+                        show-and-tell round will prove it.</span
+                    >
+                </li>
+            </ul>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Local data to map
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                The Twin Cities are unusually rich in open geodata. A starter
+                list:
+            </p>
+            <ul class="space-y-3 text-gray-600 mb-8">
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><a
+                            href="https://opendata.minneapolismn.gov"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline"
+                            >Minneapolis Open Data</a
+                        > — the city tree inventory, bike lanes, 311 calls, scooter
+                        trips, and much more</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><a
+                            href="https://gisdata.mn.gov"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:underline"
+                            >Minnesota Geospatial Commons</a
+                        > — statewide layers: lakes, land cover, parcels, LiDAR</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >Metro Transit's GTFS feed — every route, stop, and
+                        schedule in the metro, ready to draw</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >OpenStreetMap via the Overpass API — query every coffee
+                        shop, little free library, or water fountain in the
+                        metro</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        >Your own GPS traces — running routes, bike rides, the
+                        year of walks in your exercise app</span
+                    >
+                </li>
+            </ul>
+
+            <div class="flex justify-center mt-12 mb-8">
+                <div class="max-w-2xl w-full">
+                    <div class="rounded-lg overflow-hidden">
+                        <img
+                            src="/images/darton-1823-mountains-and-rivers.jpg"
+                            alt="An 1823 comparative chart showing the world's principal rivers uncoiled and hanging side by side, beside the principal mountains stacked against a shared height scale"
+                            class="w-full h-auto object-contain"
+                        />
+                    </div>
+                    <p class="text-sm text-gray-500 leading-relaxed mt-2">
+                        W. R. Gardner's <em
+                            >Comparative Heights of the Principal Mountains and
+                            Lengths of the Principal Rivers in the World</em
+                        > (William Darton, London, 1823). The rivers are uncoiled
+                        and hung side by side; the mountains queue up against one
+                        shared scale. Not quite a map, not quite a chart — evidence
+                        that the border between the two has always been open.
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Two cartography rules worth knowing going in
+            </h3>
+            <ul class="space-y-3 text-gray-600 mb-8">
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Normalize your choropleths.</span
+                        > A map of raw counts is usually just a population map wearing
+                        a costume. Divide by area or population before you color anything
+                        in.</span
+                    >
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="mt-1 text-gray-400">&#x25B8;</span>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >Projections are a choice, not a default.</span
+                        > Every flat map of a round world distorts something — area,
+                        shape, or distance — and Web Mercator quietly chooses for
+                        you. At city scale you can mostly ignore it; at any larger
+                        scale, choosing is part of the design.</span
+                    >
+                </li>
+            </ul>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                What to bring
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                One map you love (on a phone, a laptop, or paper) and, if you
+                want to build digitally, a laptop. No GIS experience needed —
+                the tooling primer starts from zero, and paper and markers will
+                be on hand for the analog lane.
+            </p>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Who this is for
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                Anyone who has ever stared at a map longer than they needed to.
+                GIS professionals, web developers, runners with GPS archives,
+                and people who just really like atlases will all find their
+                lane.
+            </p>
+
+            <p class="text-lg text-gray-600 leading-relaxed">
+                Hope to see you there!
+            </p>
+        </div>
+    </div>
+</Layout>
