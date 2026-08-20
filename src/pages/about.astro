@@ -36,247 +36,381 @@ import Layout from "../layouts/Layout.astro";
                 >.
             </p>
 
-            <div
-                id="p5-playground"
-                class="relative w-full rounded-xl overflow-hidden shadow-lg ring-1 ring-black/10 cursor-pointer select-none bg-white"
-                style="touch-action: manipulation;"
-            >
+            <div class="w-full rounded-xl overflow-hidden ring-1 ring-black/10 bg-white p-4">
+                <div class="flex items-stretch gap-1">
+                    <div
+                        class="flex flex-col items-center shrink-0"
+                        style="padding-top: 42px; padding-bottom: 48px;"
+                    >
+                        <input
+                            id="exo-ymax"
+                            type="range"
+                            min="500"
+                            max="27500"
+                            step="100"
+                            value="4000"
+                                                        style="writing-mode: vertical-lr; direction: rtl; width: 1.2rem; flex: 1;"
+                            aria-label="y-axis scale in light-years"
+                        />
+                        <span
+                            id="exo-ymax-label"
+                            class="text-[10px] text-gray-400 tabular-nums whitespace-nowrap mt-2"
+                            >4,000 ly</span
+                        >
+                    </div>
+                    <div id="exo-chart" class="flex-1 min-w-0"></div>
+                </div>
+                <div id="exo-legend" class="flex flex-wrap gap-x-4 gap-y-1 mt-3 px-2"></div>
+                <div
+                    id="exo-size-legend"
+                    class="flex items-center flex-wrap gap-x-3 gap-y-1 mt-2 px-2"
+                ></div>
             </div>
-            <p class="mt-3 mb-10 text-sm text-gray-400 text-center italic">
-                click the scene to hatch a baby axolotl
+            <p class="mt-3 mb-6 text-sm text-gray-400 text-center italic">
+                drag the slider to travel between the neighborhood and the
+                galaxy — point size is planet mass
+            </p>
+
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                Exoplanets are planets orbiting stars that are not our sun.
+                They help us understand possible environments for other forms
+                of life. This visualization, built using D3, shows how
+                exoplanet detection has changed since scientists discovered the
+                first planets orbiting other star systems in the early 1990s.
+                Each point is a confirmed exoplanet — color is the discovery
+                method, size is the planet's mass, and hovering reveals its
+                name and story. As detection methods have become more
+                sensitive, we are able to
+                detect exoplanets farther and farther, especially via the
+                transit method (light dims as exoplanets pass in front of
+                their star) or the microlensing method (where light from
+                extrasolar stars and planets is bent due to gravity of objects
+                in space).
+            </p>
+
+            <p class="text-sm text-gray-500 leading-relaxed mb-10">
+                This visualization has made use of the NASA Exoplanet Archive,
+                which is operated by the California Institute of Technology,
+                under contract with the National Aeronautics and Space
+                Administration under the Exoplanet Exploration Program.
+            Data retrieved from the archive on August 19th, 2026. Only planets with a published mass estimate appear — about 38% of confirmed planets — and mass is measured more often for some discovery methods than others, so the mix of colors reflects what has been measured, not everything that is out there. Where the archive lists multiple parameter sets for a planet, one representative value is shown.
             </p>
         </div>
     </div>
 
-    <script is:inline src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"
+    
+    <style is:global>
+        #exo-ymax {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+            --exo-fill: 13%;
+        }
+        #exo-ymax::-webkit-slider-runnable-track {
+            background: linear-gradient(
+                to top,
+                #9ca3af 0%,
+                #9ca3af var(--exo-fill),
+                #e5e7eb var(--exo-fill),
+                #e5e7eb 100%
+            );
+            border-radius: 9999px;
+        }
+        #exo-ymax::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 13px;
+            height: 24px;
+            border-radius: 7px;
+            background: #fff;
+            border: 0.5px solid rgba(0, 0, 0, 0.12);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        #exo-ymax::-moz-range-track {
+            background: linear-gradient(
+                to top,
+                #9ca3af 0%,
+                #9ca3af var(--exo-fill),
+                #e5e7eb var(--exo-fill),
+                #e5e7eb 100%
+            );
+            border-radius: 9999px;
+            width: 8px;
+        }
+        #exo-ymax::-moz-range-thumb {
+            width: 13px;
+            height: 24px;
+            border-radius: 7px;
+            background: #fff;
+            border: 0.5px solid rgba(0, 0, 0, 0.12);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+
+    <script is:inline src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
     ></script>
     <script is:inline>
         (function () {
-            const mount = document.getElementById("p5-playground");
-            if (!mount || typeof window.p5 === "undefined") return;
+            const mount = document.getElementById("exo-chart");
+            if (!mount || typeof window.d3 === "undefined") return;
+            const d3 = window.d3;
 
-            const sketch = (p) => {
-                let W, H;
-                let axolotls = [];
-                const MAX_AXOLOTLS = 14;
+            d3.csv("/data/exoplanets.csv", (r) => ({
+                name: r.name,
+                year: +r.year,
+                dist: +r.dist_ly,
+                mass: r.mass_e === "" ? null : +r.mass_e,
+                method: r.method,
+                facility: r.facility,
+            })).then((data) => {
+                // match the R original: points without a measured mass are dropped
+                data = data.filter((d) => d.mass !== null);
+                const slider = document.getElementById("exo-ymax");
+                const label = document.getElementById("exo-ymax-label");
+                const legendBox = document.getElementById("exo-legend");
 
-                const rand = (a, b) => p.random(a, b);
+                const methods = Array.from(
+                    new Set(data.map((d) => d.method)),
+                ).sort();
+                // ggplot2's default hue palette: evenly spaced HCL, C=100, L=65
+                const color = new Map(
+                    methods.map((m, i) => [
+                        m,
+                        d3.hcl(15 + (i * 360) / methods.length, 100, 65).toString(),
+                    ]),
+                );
 
-                function sizeToContainer() {
+                const size = d3
+                    .scaleSqrt()
+                    .domain([0, 25000])
+                    .range([2, 13])
+                    .clamp(true);
+                const rOf = (d) => size(d.mass);
+
+                const margin = { top: 42, right: 16, bottom: 48, left: 68 };
+                let W, H, svg, gGrid, gX, gY, gDots, title, x, y;
+
+                function build() {
+                    mount.innerHTML = "";
                     W = mount.clientWidth || 640;
-                    H = Math.max(
-                        340,
-                        Math.min(500, Math.round(window.innerHeight * 0.6)),
-                    );
-                }
+                    H = Math.max(380, Math.min(520, Math.round(window.innerHeight * 0.6)));
+                    svg = d3
+                        .select(mount)
+                        .append("svg")
+                        .attr("width", W)
+                        .attr("height", H)
+                        .attr("viewBox", [0, 0, W, H]);
 
-                class Axolotl {
-                    constructor(x, y, scale) {
-                        this.x = x === undefined ? rand(40, W - 40) : x;
-                        this.y = y === undefined ? rand(40, H - 40) : y;
-                        this.adultScale = rand(2.0, 2.7);
-                        // babies are born small and grow with time
-                        this.scale = scale === undefined ? this.adultScale : scale;
-                        this.angle = rand(0, p.TWO_PI);
-                        this.speed = rand(0.7, 1.4);
-                        this.t = rand(0, 1000);
-                        this.nseed = rand(0, 1000);
-                        // mostly leucistic pink, occasionally wild-type dusk
-                        // every axolotl its own pink, pale blush to deep rose
-                        this.bodyHue = rand(325, 355);
-                        this.bodySat = rand(25, 80);
-                        this.bodyBri = rand(58, 100);
-                        this.gillHue = rand(342, 356);
-                        this.n = 12;
-                        this.pts = [];
-                        for (let i = 0; i <= this.n; i++)
-                            this.pts.push({ x: this.x, y: this.y + i * this.segLen() });
-                    }
-                    segLen() {
-                        return 7.5 * this.scale;
-                    }
-                    shift(dx, dy) {
-                        this.x += dx;
-                        this.y += dy;
-                        for (const pt of this.pts) {
-                            pt.x += dx;
-                            pt.y += dy;
-                        }
-                    }
-                    update() {
-                        if (this.scale < this.adultScale)
-                            this.scale = Math.min(
-                                this.adultScale,
-                                this.scale + 0.0009,
+                    svg.append("clipPath")
+                        .attr("id", "exo-clip")
+                        .append("rect")
+                        .attr("x", margin.left)
+                        .attr("y", margin.top)
+                        .attr("width", W - margin.left - margin.right)
+                        .attr("height", H - margin.top - margin.bottom);
+
+                    x = d3
+                        .scaleLinear()
+                        .domain([
+                            d3.min(data, (d) => d.year) - 1,
+                            d3.max(data, (d) => d.year) + 1,
+                        ])
+                        .range([margin.left, W - margin.right]);
+                    y = d3.scaleLinear().range([H - margin.bottom, margin.top]);
+
+                    gGrid = svg.append("g");
+                    gX = svg
+                        .append("g")
+                        .attr("transform", `translate(0,${H - margin.bottom})`);
+                    gY = svg
+                        .append("g")
+                        .attr("transform", `translate(${margin.left},0)`);
+                    gDots = svg.append("g").attr("clip-path", "url(#exo-clip)");
+
+                    title = svg
+                        .append("text")
+                        .attr("x", margin.left)
+                        .attr("y", 24)
+                        .attr("font-size", 17)
+                        .attr("font-weight", 600)
+                        .attr("fill", "#111827");
+
+                    svg.append("text")
+                        .attr("x", (margin.left + W - margin.right) / 2)
+                        .attr("y", H - 10)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", 13)
+                        .attr("fill", "#6b7280")
+                        .text("Discovery Year");
+                    svg.append("text")
+                        .attr(
+                            "transform",
+                            `translate(16,${(margin.top + H - margin.bottom) / 2}) rotate(-90)`,
+                        )
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", 13)
+                        .attr("fill", "#6b7280")
+                        .text("Distance from Earth in Light-Years");
+
+                    mount.style.position = "relative";
+                    const tip = d3
+                        .select(mount)
+                        .append("div")
+                        .style("position", "absolute")
+                        .style("pointer-events", "none")
+                        .style("display", "none")
+                        .style("background", "rgba(255,255,255,0.97)")
+                        .style("border", "1px solid #e5e7eb")
+                        .style("border-radius", "6px")
+                        .style("box-shadow", "0 2px 8px rgba(0,0,0,0.12)")
+                        .style("padding", "6px 9px")
+                        .style("font-size", "12px")
+                        .style("line-height", "1.45")
+                        .style("color", "#374151")
+                        .style("z-index", "10")
+                        .style("max-width", "230px");
+
+                    gDots
+                        .selectAll("circle")
+                        .data(data)
+                        .join("circle")
+                        .attr("cx", (d) => x(d.year))
+                        .attr("r", rOf)
+                        .attr("fill", (d) => color.get(d.method))
+                        .attr("opacity", 0.5)
+                        .on("mouseover", function (event, d) {
+                            d3.select(this)
+                                .attr("opacity", 1)
+                                .attr("stroke", "#111827")
+                                .attr("stroke-width", 1);
+                            tip.style("display", "block").html(
+                                "<strong>" + d.name + "</strong><br>" +
+                                '<span style="color:' + color.get(d.method) + '">&#9679;</span> ' +
+                                d.method + " &middot; " + d.year + "<br>" +
+                                d3.format(",")(Math.round(d.dist)) + " light-years<br>" +
+                                d3.format(",")(Math.round(d.mass)) + " Earth masses<br>" +
+                                '<span style="color:#9ca3af">' + d.facility + "</span>",
                             );
+                        })
+                        .on("mousemove", (event) => {
+                            const [mx, my] = d3.pointer(event, mount);
+                            const tw = tip.node().offsetWidth;
+                            const left =
+                                mx + 14 + tw > W ? mx - tw - 14 : mx + 14;
+                            tip.style("left", left + "px").style(
+                                "top",
+                                my - 10 + "px",
+                            );
+                        })
+                        .on("mouseout", function () {
+                            d3.select(this)
+                                .attr("opacity", 0.5)
+                                .attr("stroke", "none");
+                            tip.style("display", "none");
+                        });
 
-                        this.t += 0.02;
-                        const steer =
-                            (p.noise(this.nseed, this.t * 0.5) - 0.5) * 0.3;
-                        this.angle += steer;
-                        const wiggle = Math.sin(this.t * 6) * 0.24; // gentle swim
-                        const heading = this.angle + wiggle;
-                        const spd = this.speed * (0.55 + 0.45 * this.scale);
-                        this.x += Math.cos(heading) * spd;
-                        this.y += Math.sin(heading) * spd;
-
-                        const m = 90;
-                        if (this.x < -m) this.shift(W + 2 * m, 0);
-                        if (this.x > W + m) this.shift(-(W + 2 * m), 0);
-                        if (this.y < -m) this.shift(0, H + 2 * m);
-                        if (this.y > H + m) this.shift(0, -(H + 2 * m));
-
-                        this.pts[0].x = this.x;
-                        this.pts[0].y = this.y;
-                        for (let i = 1; i <= this.n; i++) {
-                            const a = this.pts[i - 1],
-                                b = this.pts[i];
-                            let dx = b.x - a.x,
-                                dy = b.y - a.y;
-                            const d = Math.hypot(dx, dy) || 0.0001;
-                            dx /= d;
-                            dy /= d;
-                            b.x = a.x + dx * this.segLen();
-                            b.y = a.y + dy * this.segLen();
-                        }
-                    }
-                    legPair(idx, phase) {
-                        const a = this.pts[idx - 1],
-                            b = this.pts[idx + 1] || this.pts[idx];
-                        let hx = b.x - a.x,
-                            hy = b.y - a.y;
-                        const d = Math.hypot(hx, hy) || 0.0001;
-                        hx /= d;
-                        hy /= d;
-                        const px = -hy,
-                            py = hx;
-                        const c = this.pts[idx];
-                        const swing = Math.sin(this.t * 7 + phase) * 5 * this.scale;
-                        const len = 13 * this.scale; // proper axolotl legs
-                        for (const side of [1, -1]) {
-                            const fx = c.x + px * side * len + hx * swing;
-                            const fy = c.y + py * side * len + hy * swing;
-                            const kx = c.x + px * side * len * 0.5;
-                            const ky = c.y + py * side * len * 0.5;
-                            p.line(c.x, c.y, kx, ky);
-                            p.line(kx, ky, fx, fy);
-                            p.push();
-                            p.noStroke();
-                            p.fill(this.bodyHue, this.bodySat + 10, this.bodyBri * 0.92, 0.9);
-                            p.circle(fx, fy, 4.6 * this.scale);
-                            p.pop();
-                        }
-                    }
-                    draw() {
-                        const head = this.pts[0],
-                            nk = this.pts[1];
-                        let hx = head.x - nk.x,
-                            hy = head.y - nk.y;
-                        const d = Math.hypot(hx, hy) || 0.0001;
-                        hx /= d;
-                        hy /= d;
-                        const px = -hy,
-                            py = hx;
-
-                        p.drawingContext.shadowBlur = 10;
-                        p.drawingContext.shadowColor = p
-                            .color(this.gillHue, 40, 100, 0.8)
-                            .toString();
-
-                        // tail fin: translucent membrane along the back half
-                        p.noStroke();
-                        for (let i = Math.floor(this.n * 0.45); i <= this.n; i++) {
-                            const r =
-                                p.map(i, 0, this.n, 9, 2) * this.scale * 1.9;
-                            p.fill(this.bodyHue, this.bodySat + 8, this.bodyBri, 0.22);
-                            p.circle(this.pts[i].x, this.pts[i].y, r * 2);
-                        }
-
-                        // legs
-                        p.stroke(this.bodyHue, this.bodySat + 10, this.bodyBri * 0.92, 0.9);
-                        p.strokeWeight(3.6 * this.scale);
-                        this.legPair(3, 0);
-                        this.legPair(8, p.PI);
-
-                        // body (tail -> head), tapering circles
-                        p.noStroke();
-                        for (let i = this.n; i >= 0; i--) {
-                            const r = p.map(i, 0, this.n, 10, 2.2) * this.scale;
-                            p.fill(this.bodyHue, this.bodySat, this.bodyBri, 1);
-                            p.circle(this.pts[i].x, this.pts[i].y, r * 2);
-                        }
-                        // wide rounded head
-                        p.fill(this.bodyHue, this.bodySat, this.bodyBri, 1);
-                        p.ellipse(head.x, head.y, 22 * this.scale, 18 * this.scale);
-
-                        // external gills: three feathery stalks per side
-                        p.stroke(this.gillHue, 75, 100, 0.95);
-                        p.strokeWeight(1.8 * this.scale);
-                        for (const side of [1, -1]) {
-                            for (let g = 0; g < 3; g++) {
-                                const spread = 0.55 + g * 0.42;
-                                const gx = -hx * Math.cos(spread) + px * side * Math.sin(spread);
-                                const gy = -hy * Math.cos(spread) + py * side * Math.sin(spread);
-                                const bx = head.x + px * side * 6 * this.scale - hx * 2 * this.scale;
-                                const by = head.y + py * side * 6 * this.scale - hy * 2 * this.scale;
-                                const len = (11 - g * 1.5) * this.scale;
-                                const tx = bx + gx * len;
-                                const ty = by + gy * len;
-                                p.line(bx, by, tx, ty);
-                                // feathery tips
-                                p.push();
-                                p.noStroke();
-                                p.fill(this.gillHue, 70, 100, 0.9);
-                                p.circle(tx, ty, 3.2 * this.scale);
-                                p.circle(
-                                    bx + gx * len * 0.62,
-                                    by + gy * len * 0.62,
-                                    2.4 * this.scale,
-                                );
-                                p.pop();
-                            }
-                        }
-
-                    }
+                    update(+slider.value);
                 }
 
-                p.setup = () => {
-                    sizeToContainer();
-                    const cnv = p.createCanvas(W, H);
-                    cnv.parent(mount);
-                    p.colorMode(p.HSB, 360, 100, 100, 1);
-                    for (let i = 0; i < 4; i++) axolotls.push(new Axolotl());
-                };
+                function update(yMax) {
+                    y.domain([0, yMax]);
+                    label.textContent = d3.format(",")(yMax) + " ly";
+                    slider.style.setProperty(
+                        "--exo-fill",
+                        ((yMax - +slider.min) / (+slider.max - +slider.min)) * 100 + "%",
+                    );
+                    title.text(
+                        yMax <= 6000
+                            ? "Near Earth Exoplanets"
+                            : "Exoplanet Discoveries",
+                    );
 
-                p.windowResized = () => {
-                    sizeToContainer();
-                    p.resizeCanvas(W, H);
-                };
+                    gGrid.selectAll("*").remove();
+                    gGrid
+                        .selectAll("line.h")
+                        .data(y.ticks(5))
+                        .join("line")
+                        .attr("x1", margin.left)
+                        .attr("x2", W - margin.right)
+                        .attr("y1", (t) => y(t))
+                        .attr("y2", (t) => y(t))
+                        .attr("stroke", "#e5e7eb");
+                    gGrid
+                        .selectAll("line.v")
+                        .data(x.ticks(4))
+                        .join("line")
+                        .attr("y1", margin.top)
+                        .attr("y2", H - margin.bottom)
+                        .attr("x1", (t) => x(t))
+                        .attr("x2", (t) => x(t))
+                        .attr("stroke", "#e5e7eb");
 
-                p.draw = () => {
-                    p.background(0, 0, 100, 0.25); // white w/ motion trails
-                    for (const a of axolotls) {
-                        a.update();
-                        a.draw();
-                    }
-                    p.drawingContext.shadowBlur = 0;
-                };
+                    gX.call(
+                        d3
+                            .axisBottom(x)
+                            .ticks(4)
+                            .tickFormat(d3.format("d"))
+                            .tickSize(0)
+                            .tickPadding(10),
+                    ).call((g) => g.select(".domain").remove());
+                    gY.call(
+                        d3
+                            .axisLeft(y)
+                            .ticks(5)
+                            .tickFormat(d3.format(","))
+                            .tickSize(0)
+                            .tickPadding(8),
+                    ).call((g) => g.select(".domain").remove());
+                    svg.selectAll(".tick text")
+                        .attr("fill", "#6b7280")
+                        .attr("font-size", 12);
 
-                p.mousePressed = () => {
-                    if (
-                        p.mouseX >= 0 &&
-                        p.mouseX <= W &&
-                        p.mouseY >= 0 &&
-                        p.mouseY <= H &&
-                        axolotls.length < MAX_AXOLOTLS
-                    ) {
-                        // a baby is born where you click, and grows with time
-                        axolotls.push(new Axolotl(p.mouseX, p.mouseY, 0.3));
-                    }
-                };
-            };
+                    gDots.selectAll("circle").attr("cy", (d) => y(d.dist));
+                }
 
-            new window.p5(sketch);
+                slider.addEventListener("input", () => update(+slider.value));
+
+                legendBox.innerHTML = "";
+                for (const m of methods) {
+                    const chip = document.createElement("span");
+                    chip.className =
+                        "inline-flex items-center gap-1.5 text-xs text-gray-500";
+                    chip.innerHTML =
+                        '<span style="display:inline-block;width:10px;height:10px;border-radius:9999px;background:' +
+                        color.get(m) +
+                        '"></span>' +
+                        m;
+                    legendBox.appendChild(chip);
+                }
+
+                const sizeBox = document.getElementById("exo-size-legend");
+                sizeBox.innerHTML = "";
+                const sizeTitle = document.createElement("span");
+                sizeTitle.className = "text-xs text-gray-500 font-medium mr-1";
+                sizeTitle.textContent = "Planet mass (Earth masses):";
+                sizeBox.appendChild(sizeTitle);
+                for (const m of [1, 100, 1000, 10000, 25000]) {
+                    const item = document.createElement("span");
+                    item.className =
+                        "inline-flex items-center gap-1 text-xs text-gray-500";
+                    const r = size(m);
+                    const box = Math.ceil(r * 2) + 2;
+                    item.innerHTML =
+                        '<svg width="' + box + '" height="' + box + '">' +
+                        '<circle cx="' + box / 2 + '" cy="' + box / 2 +
+                        '" r="' + r + '" fill="#9ca3af" opacity="0.55"></circle></svg>' +
+                        d3.format(",")(m);
+                    sizeBox.appendChild(item);
+                }
+
+                let resizeTimer;
+                window.addEventListener("resize", () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(build, 150);
+                });
+                build();
+            });
         })();
     </script>
 </Layout>
