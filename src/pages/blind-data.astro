@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout
     title="Blind Data: A Chart Competition | tcplot: Data Visualization in Minneapolis and St. Paul"
-    description="One never-before-seen dataset, seventy-five minutes, any tools you want. Build a visualization, present it in sixty seconds, and vote."
+    description="One never-before-seen dataset, a hard time limit, any tools you want. Build a visualization, present it, and vote."
 >
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="max-w-4xl mx-auto mt-8 mb-12">
@@ -39,22 +39,11 @@ import Layout from "../layouts/Layout.astro";
             <p class="text-xl text-gray-600 leading-relaxed mb-4">
                 One dataset. Seventy-five minutes. May the best chart win.
             </p>
-            <p class="text-lg text-gray-600 leading-relaxed mb-4">
-                Join <span class="font-silkscreen">tcplot</span> for Blind
-                Data, our first chart competition — blind because nobody sees
-                the dataset until the clock starts. Everyone gets the same
-                never-before-seen data at
-                the same moment, a hard time limit, and total freedom of tools —
-                D3 or ggplot2, Tableau or Excel, Claude Code or colored pencils.
-                When time is called, every chart goes up, everyone presents for
-                sixty seconds, and the room votes.
-            </p>
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                The same table of numbers contains many different charts — a
-                distribution, a trend, an outlier, a joke — and which one you
-                find says as much about you as about the data. Working under a
-                clock against twenty other people is the fastest way we know to
-                see how wide the design space really is.
+                Nobody sees the dataset until the clock starts. Then everyone
+                gets the same data, a hard time limit, and total freedom of
+                tools — build the best visualization you can, present it in
+                sixty seconds, and vote.
             </p>
 
             <div class="flex justify-center mt-12 mb-8">
@@ -67,178 +56,13 @@ import Layout from "../layouts/Layout.astro";
                 </div>
             </div>
 
-            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
-                How the event will flow
-            </h3>
-            <ul class="space-y-3 text-gray-600 mb-8">
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Rules &amp; setup (15 min).</span
-                        > Intros, form solo entries or pairs, get your machines and
-                        tools ready. The dataset stays sealed until the clock
-                        starts — nobody, including the organizers' friends, sees
-                        it early.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Dataset reveal.</span
-                        > A link goes up on the screen: one clean CSV, small
-                        enough to open anywhere, rich enough to support a dozen
-                        different stories. A short data dictionary is included —
-                        the challenge is design, not decoding.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Build sprint (75 min).</span
-                        > Make the best visualization you can. Any tool, any
-                        medium, any level of interactivity — the only
-                        requirements are that it uses the event dataset and can
-                        be shown to the room.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Pencils down &amp; gallery walk.</span
-                        > Everything goes up — screens, projector, paper taped to
-                        the wall. Wander, look closely, ask questions.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Lightning presentations.</span
-                        > Sixty seconds each: what you found, what you encoded,
-                        and one decision you'd defend. The clock is merciless
-                        and that's the fun of it.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Vote &amp; awards.</span
-                        > Ballots, tallies, and a chart of the votes — because
-                        of course the results get visualized too.</span
-                    >
-                </li>
-            </ul>
-
-            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
-                The categories
-            </h3>
-            <p class="text-lg text-gray-600 leading-relaxed mb-4">
-                You can't win them all — one entry, one prize, so the glory
-                spreads:
-            </p>
-            <ul class="space-y-3 text-gray-600 mb-8">
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Clearest.</span
-                        > A stranger understands it in ten seconds, unaided.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Most beautiful.</span
-                        > The one people photograph.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >Most surprising.</span
-                        > Found something in the data nobody else found, or a
-                        form nobody else tried.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        ><span class="font-semibold text-gray-900"
-                            >People's choice.</span
-                        > The catch-all crown.</span
-                    >
-                </li>
-            </ul>
-
-            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
-                The rules
-            </h3>
-            <ul class="space-y-3 text-gray-600 mb-8">
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        >Any tool is legal, and AI assistants are explicitly
-                        welcome — Claude Code, notebooks, whatever you drive
-                        best. The room will notice the difference between
-                        steering an agent well and pasting its first draft.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        >Solo or pairs. Pairs present together and split the
-                        glory.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        >The event dataset must be the star. Bringing in a
-                        second dataset to join against it is allowed — and has
-                        won chartathons before.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        >When time is called, hands off. Unfinished is a
-                        legitimate aesthetic.</span
-                    >
-                </li>
-                <li class="flex items-start gap-2">
-                    <span class="mt-1 text-gray-400">&#x25B8;</span>
-                    <span
-                        >You can't vote for your own entry. You knew that.</span
-                    >
-                </li>
-            </ul>
-
-            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
-                What to bring
-            </h3>
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                A laptop with your weapon of choice installed and working —
-                seventy-five minutes is too short to fight an environment. Or
-                bring nothing and go analog; we'll have paper, markers, and
-                supplies on hand. If you plan to use an AI tool, log in before
-                the clock starts.
-            </p>
-
-            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
-                Who this is for
-            </h3>
-            <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                Everyone from first-chart beginners to people with strong
-                opinions about axis label rotation. The time limit is a great
-                equalizer: nobody's polish survives seventy-five minutes, so
-                what wins is ideas. Competitive in format, friendly in fact.
+                Full details soon — RSVP on <a
+                    href="https://www.meetup.com/tcplot/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:underline">Meetup</a
+                >.
             </p>
 
             <p class="text-lg text-gray-600 leading-relaxed">
