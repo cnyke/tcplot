@@ -1,11 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { readFileSync } from "node:fs";
-
-const csv = readFileSync("public/data/snow-emergency-jefferson-tows.csv", "utf8").trim();
-const [headerLine, ...lines] = csv.split("\n");
-const headers = headerLine.split(",");
-const rows = lines.map((l) => l.split(","));
 ---
 
 <Layout
@@ -70,56 +64,24 @@ const rows = lines.map((l) => l.split(","));
             </div>
 
             <h3 class="text-2xl font-bold text-gray-900 mb-3">
-                The dataset: every tow from the Jefferson snow emergency
+                The dataset: City of Minneapolis Public Tree Inventory
             </h3>
             <p class="text-lg text-gray-600 leading-relaxed mb-4">
-                Minneapolis names its snow emergencies alphabetically. Jefferson
-                was declared in late December 2025, and over its three days the
-                city towed {rows.length} cars. Each row is one tow: the date,
-                which day of the emergency it fell on, the street address, the
-                neighborhood, community, ward and tow zone, and a latitude and
-                longitude.
+                Every public tree the city and the Park Board have inventoried,
+                with its genus or species and a latitude and longitude. Street
+                trees, park trees, and recent plantings are in there as
+                separate layers. It is big, it is uneven, and it will not tell
+                you what to look at. That is the point.
             </p>
-            <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                Source: <a
-                    href="https://opendata.minneapolis.gov/"
+            <p class="mb-12">
+                <a
+                    href="https://www.arcgis.com/home/item.html?id=9e896259239d428dbf332a2ac595b623"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-blue-600 hover:underline">Minneapolis Open Data</a
-                >, Snow Emergency Jefferson Tows 2025. Column names were tidied;
-                the values are untouched. A few rows have a blank neighborhood
-                and a ward and tow zone of 0. That is in the source too, and
-                what you do with it is one of the interpretations.
-            </p>
-            <p class="mb-8">
-                <a
-                    href="/data/snow-emergency-jefferson-tows.csv"
-                    download
                     class="inline-block bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                    >Download the CSV ({rows.length} rows)</a
+                    >Open the data on Minneapolis Open Data</a
                 >
             </p>
-
-            <div class="overflow-auto max-h-[36rem] border border-gray-200 rounded-lg mb-12">
-                <table class="min-w-full text-sm text-left text-gray-700">
-                    <thead class="bg-gray-100 text-gray-900 sticky top-0">
-                        <tr>
-                            {headers.map((h) => (
-                                <th class="px-3 py-2 font-semibold whitespace-nowrap">{h}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows.map((r) => (
-                            <tr class="border-t border-gray-100 odd:bg-white even:bg-gray-50">
-                                {r.map((c) => (
-                                    <td class="px-3 py-1.5 whitespace-nowrap">{c}</td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
 
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
                 RSVP on <a
