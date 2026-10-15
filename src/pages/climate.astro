@@ -1,0 +1,333 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="Climate Data | tcplot: Data Visualization in Minneapolis and St. Paul"
+    description="A tcplot morning with Minneapolis-St. Paul temperature data."
+>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-4xl mx-auto mt-8 mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                Upcoming: Climate Data
+            </h2>
+
+            <div class="mb-6 text-gray-700">
+                <p class="text-lg font-semibold text-gray-900">
+                    Saturday, Dec 12 · 10:00 AM to 12:00 PM CST
+                </p>
+                <p class="flex items-start gap-2 mt-1">
+                    <svg
+                        class="w-5 h-5 mt-0.5 shrink-0 text-gray-400"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M12 2c-3.866 0-7 3.07-7 6.857 0 4.34 4.686 9.86 6.412 11.74a.8.8 0 0 0 1.176 0C14.314 18.717 19 13.197 19 8.857 19 5.07 15.866 2 12 2Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span
+                        ><span class="font-semibold text-gray-900"
+                            >The Coffee Shop NE</span
+                        ><br />2852 Johnson St NE · Minneapolis, MN</span
+                    >
+                </p>
+            </div>
+
+            <div class="mt-10 mb-8">
+                <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+                    <h3 class="text-xl font-semibold text-gray-900">
+                        Every year a stripe: Minneapolis-St. Paul, 1939 to 2025
+                    </h3>
+                    <button
+                        id="stripes-toggle"
+                        type="button"
+                        aria-pressed="false"
+                        class="text-sm font-medium text-blue-600 hover:underline"
+                    >
+                        Show the temperatures
+                    </button>
+                </div>
+                <div
+                    id="stripes-chart"
+                    class="relative w-full select-none"
+                    tabindex="0"
+                    role="img"
+                    aria-label="Warming stripes for Minneapolis-St. Paul, 1939 to 2025: one stripe per year, blue for years cooler than the 1971 to 2000 average and red for warmer. Use the left and right arrow keys to step through the years."
+                >
+                </div>
+                <div class="mt-4 flex items-center gap-3 text-sm text-gray-500">
+                    <span>Cooler</span>
+                    <span id="stripes-legend" class="flex h-3 flex-1 max-w-xs rounded-sm overflow-hidden"></span>
+                    <span>Warmer</span>
+                </div>
+                <p class="text-sm text-gray-500 leading-relaxed mt-3">
+                    Each stripe is one year's average temperature, colored by
+                    how far it sits from the 1971 to 2000 average (45.8°F).
+                    Hover or tap a stripe to see its year; use the arrow keys
+                    to step through them. Style after Ed Hawkins's warming
+                    stripes; data from NOAA.
+                </p>
+            </div>
+
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                The dataset:
+                <a
+                    href="/data/msp-annual-temperature.csv"
+                    class="text-blue-600 hover:underline"
+                    download>Minneapolis-St. Paul annual average temperature,
+                    1939 to 2025</a
+                > (CSV, from NOAA's National Centers for Environmental
+                Information).
+            </p>
+
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                RSVP on <a
+                    href="https://www.meetup.com/tcplot/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:underline">Meetup</a
+                >.
+            </p>
+
+            <p class="text-lg text-gray-600 leading-relaxed">
+                Hope to see you there!
+            </p>
+        </div>
+    </div>
+
+    <script is:inline src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+    ></script>
+    <script is:inline>
+        (function () {
+            const mount = document.getElementById("stripes-chart");
+            if (!mount || typeof window.d3 === "undefined") return;
+            const d3 = window.d3;
+            const toggle = document.getElementById("stripes-toggle");
+
+            // ColorBrewer RdBu, 8 classes per side, as in Ed Hawkins's warming stripes
+            const pal = [
+                "#08306b", "#08519c", "#2171b5", "#4292c6",
+                "#6baed6", "#9ecae1", "#c6dbef", "#deebf7",
+                "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a",
+                "#ef3b2c", "#cb181d", "#a50f15", "#67000d",
+            ];
+            const legend = document.getElementById("stripes-legend");
+            pal.forEach((c) => {
+                const s = document.createElement("span");
+                s.className = "flex-1";
+                s.style.background = c;
+                legend.appendChild(s);
+            });
+
+            d3.csv("/data/msp-annual-temperature.csv", (r) => ({
+                year: +r.year,
+                temp: +r.avg_temp_f,
+            })).then((data) => {
+                // baseline: 1971 to 2000 mean; colors saturate at ±2.6 standard deviations
+                const ref = data.filter((d) => d.year >= 1971 && d.year <= 2000);
+                const mu = d3.mean(ref, (d) => d.temp);
+                const sd = d3.deviation(ref, (d) => d.temp) * Math.sqrt((ref.length - 1) / ref.length);
+                const color = (t) => {
+                    const z = Math.max(-2.6, Math.min(2.6, (t - mu) / sd));
+                    return pal[Math.min(Math.floor(((z + 2.6) / 5.2) * pal.length), pal.length - 1)];
+                };
+                const fmt = d3.format(".1f");
+                const signed = (v) => (v >= 0 ? "+" : "−") + fmt(Math.abs(v));
+
+                let showLine = false;
+                let selected = null;
+                let W, H, svg, x, y, stripes, ring, lineG, tip, margin;
+
+                function tipHtml(d) {
+                    const diff = d.temp - mu;
+                    return (
+                        "<strong>" + d.year + "</strong><br>" +
+                        fmt(d.temp) + "°F average<br>" +
+                        '<span style="color:#6b7280">' + signed(diff) +
+                        "°F vs. 1971 to 2000</span>"
+                    );
+                }
+
+                function select(d, px) {
+                    selected = d;
+                    if (!d) {
+                        ring.style("display", "none");
+                        tip.style("display", "none");
+                        return;
+                    }
+                    const bw = x.bandwidth();
+                    ring.style("display", null)
+                        .attr("x", x(d.year) - 1)
+                        .attr("width", bw + 2);
+                    tip.style("display", "block").html(tipHtml(d));
+                    const tw = tip.node().offsetWidth;
+                    const cx = px == null ? x(d.year) + bw / 2 : px;
+                    const left = Math.max(0, Math.min(W - tw, cx - tw / 2));
+                    tip.style("left", left + "px").style("top", margin.top + 8 + "px");
+                }
+
+                function drawLine() {
+                    lineG.selectAll("*").remove();
+                    if (!showLine) return;
+                    const bw = x.bandwidth();
+                    const line = d3.line()
+                        .x((d) => x(d.year) + bw / 2)
+                        .y((d) => y(d.temp));
+                    lineG.append("path")
+                        .datum(data)
+                        .attr("fill", "none")
+                        .attr("stroke", "#ffffff")
+                        .attr("stroke-opacity", 0.85)
+                        .attr("stroke-width", 5)
+                        .attr("stroke-linejoin", "round")
+                        .attr("d", line);
+                    lineG.append("path")
+                        .datum(data)
+                        .attr("fill", "none")
+                        .attr("stroke", "#111827")
+                        .attr("stroke-width", 2)
+                        .attr("stroke-linejoin", "round")
+                        .attr("d", line);
+                    const ticks = [42, 44, 46, 48, 50];
+                    const g = lineG.append("g");
+                    g.selectAll("text")
+                        .data(ticks)
+                        .join("text")
+                        .attr("x", W - 4)
+                        .attr("y", (v) => y(v) - 4)
+                        .attr("text-anchor", "end")
+                        .attr("font-size", 11)
+                        .attr("fill", "#111827")
+                        .attr("paint-order", "stroke")
+                        .attr("stroke", "#ffffff")
+                        .attr("stroke-width", 3)
+                        .text((v) => v + "°F");
+                    g.selectAll("line")
+                        .data(ticks)
+                        .join("line")
+                        .attr("x1", 0)
+                        .attr("x2", W)
+                        .attr("y1", (v) => y(v))
+                        .attr("y2", (v) => y(v))
+                        .attr("stroke", "#ffffff")
+                        .attr("stroke-opacity", 0.5)
+                        .attr("stroke-dasharray", "2 4");
+                    g.lower();
+                }
+
+                function build() {
+                    mount.innerHTML = "";
+                    W = mount.clientWidth || 640;
+                    const narrow = W < 480;
+                    margin = { top: 0, bottom: 24 };
+                    H = narrow ? 220 : 320;
+                    const plotH = H - margin.bottom;
+
+                    svg = d3.select(mount)
+                        .append("svg")
+                        .attr("width", W)
+                        .attr("height", H)
+                        .attr("viewBox", [0, 0, W, H])
+                        .style("display", "block")
+                        .style("touch-action", "pan-y");
+
+                    x = d3.scaleBand()
+                        .domain(data.map((d) => d.year))
+                        .range([0, W])
+                        .paddingInner(0);
+                    y = d3.scaleLinear()
+                        .domain([41, 52])
+                        .range([plotH - 8, 8]);
+
+                    stripes = svg.append("g")
+                        .selectAll("rect")
+                        .data(data)
+                        .join("rect")
+                        .attr("x", (d) => x(d.year))
+                        .attr("y", 0)
+                        .attr("width", x.bandwidth() + 0.5)
+                        .attr("height", plotH)
+                        .attr("fill", (d) => color(d.temp));
+
+                    lineG = svg.append("g").style("pointer-events", "none");
+
+                    ring = svg.append("rect")
+                        .attr("y", 1)
+                        .attr("height", plotH - 2)
+                        .attr("fill", "none")
+                        .attr("stroke", "#111827")
+                        .attr("stroke-width", 2)
+                        .style("pointer-events", "none")
+                        .style("display", "none");
+
+                    const decades = data
+                        .map((d) => d.year)
+                        .filter((yr) => yr % (narrow ? 20 : 10) === 0);
+                    svg.append("g")
+                        .selectAll("text")
+                        .data(decades)
+                        .join("text")
+                        .attr("x", (yr) => Math.max(16, Math.min(W - 16, x(yr) + x.bandwidth() / 2)))
+                        .attr("y", H - 6)
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", 12)
+                        .attr("fill", "#6b7280")
+                        .text((yr) => yr);
+
+                    tip = d3.select(mount)
+                        .append("div")
+                        .style("position", "absolute")
+                        .style("display", "none")
+                        .style("pointer-events", "none")
+                        .style("background", "#ffffff")
+                        .style("border", "1px solid #e5e7eb")
+                        .style("border-radius", "6px")
+                        .style("box-shadow", "0 2px 6px rgba(0,0,0,0.12)")
+                        .style("padding", "6px 10px")
+                        .style("font-size", "13px")
+                        .style("line-height", "1.4")
+                        .style("color", "#111827")
+                        .style("white-space", "nowrap");
+
+                    // the whole stripe column is the hit target, top to bottom
+                    svg.on("pointermove pointerdown", (event) => {
+                        const [mx] = d3.pointer(event, svg.node());
+                        const i = Math.max(0, Math.min(data.length - 1, Math.floor(mx / x.step())));
+                        select(data[i], mx);
+                    }).on("pointerleave", (event) => {
+                        if (event.pointerType !== "touch") select(null);
+                    });
+
+                    drawLine();
+                    if (selected) select(selected);
+                }
+
+                toggle.addEventListener("click", () => {
+                    showLine = !showLine;
+                    toggle.setAttribute("aria-pressed", String(showLine));
+                    toggle.textContent = showLine ? "Hide the temperatures" : "Show the temperatures";
+                    drawLine();
+                });
+
+                mount.addEventListener("keydown", (e) => {
+                    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+                    e.preventDefault();
+                    let i = selected ? data.indexOf(selected) : (e.key === "ArrowLeft" ? data.length : -1);
+                    i += e.key === "ArrowRight" ? 1 : -1;
+                    select(data[Math.max(0, Math.min(data.length - 1, i))]);
+                });
+                mount.addEventListener("blur", () => select(null));
+
+                build();
+                let raf;
+                window.addEventListener("resize", () => {
+                    cancelAnimationFrame(raf);
+                    raf = requestAnimationFrame(build);
+                });
+            });
+        })();
+    </script>
+</Layout>
