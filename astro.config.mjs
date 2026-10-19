@@ -6,6 +6,7 @@ export default defineConfig({
   output: 'static',
   redirects: {
     '/blind-data': '/one-dataset',
+    '/perception-lab': '/opposing-data-stories',
   },
   integrations: [tailwind()],
 });
