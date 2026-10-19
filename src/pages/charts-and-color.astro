@@ -113,6 +113,91 @@ import Layout from "../layouts/Layout.astro";
                 </li>
             </ul>
 
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Color in charts, briefly
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                The primer, in short. Most color decisions in a chart come down
+                to matching the palette to the shape of the data.
+            </p>
+
+            <div class="space-y-8 mb-10">
+                <div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                        Sequential: low to high
+                    </h4>
+                    <div class="h-8 rounded" style="background: linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725);" role="img" aria-label="A sequential palette running from dark purple through teal and green to bright yellow"></div>
+                    <p class="text-lg text-gray-600 leading-relaxed mt-3">
+                        For ordered values with no special middle: temperature,
+                        income, population density. Lightness should change
+                        steadily from one end to the other, so darker reads as
+                        more (or less) without a legend lookup. This one is
+                        viridis, matplotlib's default since 2015.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                        Diverging: two directions from a middle
+                    </h4>
+                    <div class="h-8 rounded" style="background: linear-gradient(to right, #b2182b, #ef8a62, #fddbc7, #f7f7f7, #d1e5f0, #67a9cf, #2166ac);" role="img" aria-label="A diverging palette running from dark red through pale pink to near white, then pale blue to dark blue"></div>
+                    <p class="text-lg text-gray-600 leading-relaxed mt-3">
+                        For data with a meaningful midpoint: above or below
+                        zero, gains and losses, warmer or cooler than normal.
+                        Two hues darken as they move away from a light, neutral
+                        center. Put the center on the value that matters, not
+                        just the middle of the range.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                        Categorical: different, not more
+                    </h4>
+                    <div class="h-8 rounded overflow-hidden flex" role="img" aria-label="Eight distinct colors: orange, sky blue, bluish green, yellow, blue, vermillion, reddish purple, and black"><div class="flex-1" style="background: #E69F00;"></div><div class="flex-1" style="background: #56B4E9;"></div><div class="flex-1" style="background: #009E73;"></div><div class="flex-1" style="background: #F0E442;"></div><div class="flex-1" style="background: #0072B2;"></div><div class="flex-1" style="background: #D55E00;"></div><div class="flex-1" style="background: #CC79A7;"></div><div class="flex-1" style="background: #000000;"></div></div>
+                    <p class="text-lg text-gray-600 leading-relaxed mt-3">
+                        For groups with no order: species, neighborhoods,
+                        parties. Hues should look equally important, so none
+                        reads as a ranking. Past about seven categories, color
+                        stops working; label directly or group the rest as
+                        "other." This is the Okabe-Ito palette, designed to stay
+                        distinct for colorblind readers.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                        Why rainbows invent edges
+                    </h4>
+                    <div class="h-8 rounded" style="background: linear-gradient(to right, #00007f, #0000ff, #007fff, #00ffff, #7fff7f, #ffff00, #ff7f00, #ff0000, #7f0000);" role="img" aria-label="A rainbow palette running from dark blue through cyan, green, and yellow to red and dark red"></div>
+                    <div class="h-8 rounded mt-2" style="background: linear-gradient(to right, #00007f, #0000ff, #007fff, #00ffff, #7fff7f, #ffff00, #ff7f00, #ff0000, #7f0000); filter: grayscale(1);" role="img" aria-label="The same rainbow palette in grayscale, showing brightness rising to a peak in the middle and falling again"></div>
+                    <p class="text-lg text-gray-600 leading-relaxed mt-3">
+                        The rainbow (above, then in grayscale) isn't ordered by
+                        lightness: brightness climbs to a peak at cyan and
+                        yellow, then falls again. Your eye reads those bright
+                        bands as sharp boundaries, so smooth data looks like it
+                        has edges, and the darkest blue and darkest red look
+                        nearly the same. Compare viridis, which keeps getting
+                        lighter the whole way.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-semibold text-gray-900 mb-2">
+                        One in twelve men
+                    </h4>
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        About 1 in 12 men and 1 in 200 women of Northern
+                        European ancestry have some color vision deficiency,
+                        most often red-green. A chart that separates groups
+                        only by red and green fails them. Vary lightness as
+                        well as hue, label lines directly instead of relying on
+                        a legend, and check your chart in a colorblindness
+                        simulator before you share it.
+                    </p>
+                </div>
+            </div>
+
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
                 No design experience needed; the primer starts from zero. Bring
                 one chart whose color you have opinions about (on a phone, a
