@@ -1,5 +1,271 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+// Public domain scans, via Wikimedia Commons. Local copies resized to 1000px.
+const historicalMaps = [
+    {
+        img: "tabula-rogeriana-1154",
+        commons: "TabulaRogeriana.jpg",
+        title: "Tabula Rogeriana",
+        meta: "Muhammad al-Idrisi · 1154",
+        note: "Drawn for Roger II of Sicily from Arab, Greek, and travelers' accounts, with south at the top. For three centuries it was among the most accurate world maps anywhere. Shown in Konrad Miller's 1928 reconstruction.",
+    },
+    {
+        img: "hereford-mappa-mundi-1300",
+        commons: "Hereford-Karte.jpg",
+        title: "Hereford Mappa Mundi",
+        meta: "England · c. 1300",
+        note: "The largest surviving medieval world map, on a single calfskin. Jerusalem sits at the center and east is at the top; it maps belief, history, and monsters as much as geography.",
+    },
+    {
+        img: "catalan-atlas-1375",
+        commons: "1375 Atlas Catalan Abraham Cresques.jpg",
+        title: "Catalan Atlas",
+        meta: "Abraham and Jehuda Cresques · 1375",
+        note: "The masterpiece of the Majorcan portolan school: compass-rose rhumb lines for sailors, plus Mansa Musa of Mali holding a gold nugget, a reminder of what Europe knew about African wealth.",
+    },
+    {
+        img: "kangnido-1402",
+        commons: "GeneralMapOfDistancesAndHistoricCapitals.jpg",
+        title: "Kangnido",
+        meta: "Joseon Korea · 1402 (copy, late 1400s)",
+        note: "One of the oldest surviving world maps from East Asia, made in Korea from Chinese and Islamic sources. Korea is drawn oversized and Africa appears decades before Europeans rounded the Cape.",
+    },
+    {
+        img: "waldseemuller-1507",
+        commons: "Waldseemuller map 2.jpg",
+        title: "Universalis Cosmographia",
+        meta: "Martin Waldseemüller · 1507",
+        note: "The first map to print the name “America.” The Library of Congress bought the only known copy for $10 million and calls it America's birth certificate.",
+    },
+    {
+        img: "mercator-1569",
+        commons: "Mercator 1569 world map composite.jpg",
+        title: "Nova et Aucta Orbis Terrae",
+        meta: "Gerardus Mercator · 1569",
+        note: "Built so that a straight line is a constant compass bearing, which made it perfect for navigation and terrible for comparing areas. Greenland's bloat starts here.",
+    },
+    {
+        img: "halley-trade-winds-1686",
+        commons: "Edmond Halley's map of the trade winds, 1686.jpg",
+        title: "Map of the Trade Winds",
+        meta: "Edmond Halley · 1686",
+        note: "Often called the first meteorological map. Halley drew wind direction with rows of short strokes, an early ancestor of every vector-field and streamline map since.",
+    },
+    {
+        img: "nolli-rome-1748",
+        commons: "Nuova pianta di Roma data in luce da Giambattista Nolli l’anno MDCCXLVII, known as La Pianta Grande di Roma (IA clevelandart-2020.276-nuova-pianta-di-roma).tif",
+        title: "La Pianta Grande di Roma",
+        meta: "Giambattista Nolli · 1748",
+        note: "Twelve engraved plates that render public interiors (churches, courtyards) as white like the streets, and private buildings as dark. Architects still use “Nolli maps” to show public space.",
+    },
+    {
+        img: "nicollet-upper-mississippi-1843",
+        commons: "Hydrographical Basin of the Upper Mississippi River - From Astronomical and Barometrical Observations Surveys and (IA dr hydrographical-basin-of-the-upper-mississippi-river-from-astronomical-and-13071000).jpg",
+        title: "Hydrographical Basin of the Upper Mississippi River",
+        meta: "Joseph N. Nicollet · 1843",
+        note: "Our home map. Nicollet's surveys of 1836 to 1839 produced the first accurate map of what became Minnesota, and it records many Dakota and Ojibwe place names. Yes, that Nicollet.",
+    },
+    {
+        img: "snow-cholera-1854",
+        commons: "Snow-cholera-map-1.jpg",
+        title: "Cholera in Soho",
+        meta: "John Snow · 1854",
+        note: "Stacked bars mark each death around the Broad Street pump. Snow had already made his case before drawing it, but the map became the founding image of epidemiology and spatial analysis.",
+    },
+    {
+        img: "minard-napoleon-1869",
+        commons: "Minard.png",
+        title: "Napoleon's March on Moscow",
+        meta: "Charles Joseph Minard · 1869",
+        note: "Six variables on one sheet: army size, latitude and longitude, direction, temperature, and dates. Edward Tufte called it possibly the best statistical graphic ever drawn.",
+    },
+    {
+        img: "booth-poverty-1898",
+        commons: "London Poverty Map, 1898-9 - Sheet 01 - eastern district - lse-library-yzrdcOgEs6c-unsplash.jpg",
+        title: "Map Descriptive of London Poverty",
+        meta: "Charles Booth · 1898–99",
+        note: "Every street colored by household income in seven classes, from black (“lowest class”) to yellow (“wealthy”), built from street-by-street survey work. A direct ancestor of today's choropleth. Shown: the East End sheet.",
+    },
+];
+
+const commonsUrl = (file: string) =>
+    "https://commons.wikimedia.org/wiki/File:" +
+    encodeURIComponent(file.replace(/ /g, "_"));
+
+const resources = [
+    {
+        heading: "Twin Cities and Minnesota map data",
+        items: [
+            {
+                name: "Minnesota Geospatial Commons",
+                url: "https://gisdata.mn.gov/",
+                note: "The state's clearinghouse for GIS data: boundaries, land cover, lakes, roads, and Met Council layers. Start here for anything statewide.",
+            },
+            {
+                name: "Open Data Minneapolis",
+                url: "https://opendata.minneapolismn.gov/",
+                note: "City datasets with locations attached: 311 calls, police incidents, the tree inventory, building permits, parcels.",
+            },
+            {
+                name: "Saint Paul Open Information",
+                url: "https://information.stpaul.gov/",
+                note: "The St. Paul equivalent, including district council boundaries and city service data.",
+            },
+            {
+                name: "Hennepin County GIS Open Data",
+                url: "https://gis-hennepin.hub.arcgis.com/",
+                note: "Parcels, property values, elections, and county infrastructure, downloadable as shapefiles or GeoJSON.",
+            },
+            {
+                name: "MnTOPO (Minnesota DNR)",
+                url: "https://arcgis.dnr.state.mn.us/maps/mntopo/",
+                note: "Statewide high-resolution lidar elevation in the browser. Good for seeing the river bluffs, old channels, and how flat the city really is.",
+            },
+        ],
+    },
+    {
+        heading: "Local history through maps",
+        items: [
+            {
+                name: "Mapping Prejudice (University of Minnesota)",
+                url: "https://mappingprejudice.umn.edu/",
+                note: "Volunteers have read thousands of property deeds to map the racial covenants that shaped Minneapolis neighborhoods. A model of community-built map data.",
+            },
+            {
+                name: "Minnesota Historical Aerial Photographs Online",
+                url: "https://apps.lib.umn.edu/mhapo/",
+                note: "Historical aerial photos of the whole state. Find your block before the freeways.",
+            },
+            {
+                name: "John R. Borchert Map Library",
+                url: "https://www.lib.umn.edu/borchert",
+                note: "The University of Minnesota's map library, open to the public, with historical maps, atlases, and staff who love questions.",
+            },
+            {
+                name: "Native Land Digital",
+                url: "https://native-land.ca/",
+                note: "An interactive map of Indigenous territories, languages, and treaties. The Twin Cities sit on Dakota land, Mni Sota Makoce.",
+            },
+        ],
+    },
+    {
+        heading: "Historical map collections",
+        items: [
+            {
+                name: "David Rumsey Map Collection",
+                url: "https://www.davidrumsey.com/",
+                note: "More than 100,000 high-resolution scans, many georeferenced so you can lay old maps over modern ones.",
+            },
+            {
+                name: "Library of Congress: Maps",
+                url: "https://www.loc.gov/maps/",
+                note: "Free downloads of a huge collection, including Sanborn fire insurance maps of Minneapolis and St. Paul, drawn building by building.",
+            },
+            {
+                name: "Leventhal Map & Education Center",
+                url: "https://www.leventhalmap.org/",
+                note: "Boston Public Library's map center, with an excellent digital collection and thoughtful online exhibitions on maps and power.",
+            },
+        ],
+    },
+    {
+        heading: "Tools for making maps",
+        items: [
+            {
+                name: "Datawrapper",
+                url: "https://www.datawrapper.de/maps",
+                note: "The fastest path from a spreadsheet to a clean choropleth or symbol map. Free, no code, newsroom quality.",
+            },
+            {
+                name: "Felt",
+                url: "https://felt.com/",
+                note: "Collaborative web mapping. Drop in a file, draw, annotate, and share a link. Friendly for first-timers.",
+            },
+            {
+                name: "QGIS",
+                url: "https://qgis.org/",
+                note: "Free, open-source, full desktop GIS. Steeper learning curve, but it can do nearly anything the expensive software does.",
+            },
+            {
+                name: "geojson.io",
+                url: "https://geojson.io/",
+                note: "Draw points, lines, and shapes on a map and export them as GeoJSON. Great for making your own small dataset.",
+            },
+            {
+                name: "Mapshaper",
+                url: "https://mapshaper.org/",
+                note: "Simplify, clip, and convert shapefiles and GeoJSON in the browser. Fixes the file that is too big to load.",
+            },
+            {
+                name: "kepler.gl",
+                url: "https://kepler.gl/",
+                note: "Uber's open-source tool for big point datasets: hexbins, arcs, and time animation, all in the browser.",
+            },
+            {
+                name: "OpenStreetMap",
+                url: "https://www.openstreetmap.org/",
+                note: "The free, volunteer-built map of the world. Both a basemap and a dataset, and you can edit your own neighborhood.",
+            },
+            {
+                name: "Natural Earth",
+                url: "https://www.naturalearthdata.com/",
+                note: "Public domain country, state, river, and coastline shapes at three scales. The default source for world maps.",
+            },
+        ],
+    },
+    {
+        heading: "Color, projection, and design",
+        items: [
+            {
+                name: "ColorBrewer",
+                url: "https://colorbrewer2.org/",
+                note: "Cynthia Brewer's color schemes for maps: sequential, diverging, and qualitative, with colorblind-safe and print-safe filters.",
+            },
+            {
+                name: "The True Size Of",
+                url: "https://www.thetruesize.com/",
+                note: "Drag countries around a Mercator map and watch them shrink or grow. The fastest argument about projections there is.",
+            },
+            {
+                name: "Jason Davies: Maps",
+                url: "https://www.jasondavies.com/maps/",
+                note: "Interactive projection experiments built with D3: transitions between projections, interrupted globes, and more.",
+            },
+            {
+                name: "xkcd: Map Projections",
+                url: "https://xkcd.com/977/",
+                note: "“What your favorite map projection says about you.” Funny and, for a cartoon, accurate.",
+            },
+            {
+                name: "Atlas of Design",
+                url: "https://atlasofdesign.org/",
+                note: "A juried collection of beautiful maps from the North American Cartographic Information Society. Browse for inspiration.",
+            },
+        ],
+    },
+    {
+        heading: "Books",
+        items: [
+            {
+                name: "How to Lie with Maps, Mark Monmonier",
+                note: "The classic on how projection, generalization, and color choices shape what a map says. Short, funny, and essential.",
+            },
+            {
+                name: "Everything Sings: Maps for a Narrative Atlas, Denis Wood",
+                note: "A whole neighborhood in Raleigh mapped by its jack-o'-lanterns, streetlight pools, and radio waves. Proof that anything can be a map.",
+            },
+            {
+                name: "This Is Not an Atlas, kollektiv orangotango+",
+                note: "Counter-cartography from activists and communities around the world, mapping to resist rather than to rule. Free to read online.",
+            },
+            {
+                name: "Cartography., Kenneth Field",
+                note: "A beautifully designed A to Z reference on making good maps, written for people who make them.",
+            },
+        ],
+    },
+];
 ---
 
 <Layout
@@ -38,10 +304,8 @@ import Layout from "../layouts/Layout.astro";
 
             <p class="text-xl text-gray-600 leading-relaxed mb-4"></p>
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                A morning devoted entirely to maps, in two acts: bring one map
-                you love (or love to hate) for a two-minute show-and-tell, then
-                we'll build maps of our own and present them. No GIS experience
-                needed.
+                Join tcplot for a morning devoted entirely to maps, in two
+                acts.
             </p>
 
             <div class="flex justify-center mt-12 mb-8">
@@ -61,8 +325,64 @@ import Layout from "../layouts/Layout.astro";
                 </div>
             </div>
 
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Act one: bring a map
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-8">
+                Your ticket in is one map, any map, and two minutes on why it's
+                great (or gloriously terrible) — a classic like Minard or Snow's
+                cholera map, an interactive you keep going back to, a paper map
+                with a history, something you made yourself, or a bad map you
+                love to hate. By the end of the round you'll have seen thirty
+                maps and stolen ideas from most of them.
+            </p>
+
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Act two: build together
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                After a short primer on the modern mapping stack, work solo or
+                in small groups to make a map — of your neighborhood, your
+                commute, the Twin Cities, anywhere — then present what you made.
+                A half-built map with a good idea beats a finished default.
+            </p>
+            <p class="text-lg font-semibold text-gray-900 mb-2">
+                Pick your lane:
+            </p>
+            <ul class="space-y-2 text-lg text-gray-600 mb-6 list-disc pl-6">
+                <li>
+                    <span class="font-semibold text-gray-900">Fast and no-code</span>
+                    — Datawrapper, Felt, kepler.gl
+                </li>
+                <li>
+                    <span class="font-semibold text-gray-900">Web code</span> —
+                    Leaflet, MapLibre GL, deck.gl, D3
+                </li>
+                <li>
+                    <span class="font-semibold text-gray-900">Analysis-first</span>
+                    — QGIS, GeoPandas + Folium
+                </li>
+                <li>
+                    <span class="font-semibold text-gray-900">Analog</span> —
+                    hand-drawn cartography is a real and honorable lane
+                </li>
+            </ul>
+            <p class="text-lg text-gray-600 leading-relaxed mb-8">
+                We'll have a starter list of local open geodata ready to map:
+                the Minneapolis tree inventory, bike lanes and scooter trips,
+                the Minnesota Geospatial Commons, Metro Transit's GTFS feed,
+                OpenStreetMap, or your own GPS traces.
+            </p>
+
             <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                Full details soon — RSVP on <a
+                No GIS experience needed — the primer starts from zero, and AI
+                assistants are welcome (they're good at GeoJSON plumbing). Bring
+                one map you love (on a phone, a laptop, or paper) and, if you
+                want to build digitally, a laptop.
+            </p>
+
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                RSVP on <a
                     href="https://www.meetup.com/tcplot/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -73,6 +393,96 @@ import Layout from "../layouts/Layout.astro";
             <p class="text-lg text-gray-600 leading-relaxed">
                 Hope to see you there!
             </p>
+        </div>
+
+        <div class="border-t border-gray-200 pt-12 mb-16">
+            <div class="max-w-4xl mx-auto mb-8">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                    Twelve Maps That Changed How We See
+                </h3>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    A short, opinionated tour of public domain maps, from
+                    medieval world pictures to the first maps of data. Click
+                    any map for the full-resolution scan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {
+                    historicalMaps.map((m) => (
+                        <figure class="flex flex-col">
+                            <a
+                                href={commonsUrl(m.commons)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="block rounded-lg overflow-hidden bg-gray-100 aspect-[4/3]"
+                            >
+                                <img
+                                    src={`/images/historical-maps/${m.img}.jpg`}
+                                    alt={`${m.title}, ${m.meta}`}
+                                    loading="lazy"
+                                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                />
+                            </a>
+                            <figcaption class="mt-3">
+                                <p class="font-semibold text-gray-900">
+                                    {m.title}
+                                </p>
+                                <p class="text-sm text-gray-500 mb-1">
+                                    {m.meta}
+                                </p>
+                                <p class="text-sm text-gray-600 leading-relaxed">
+                                    {m.note}
+                                </p>
+                            </figcaption>
+                        </figure>
+                    ))
+                }
+            </div>
+            <p class="max-w-4xl mx-auto text-sm text-gray-500 mt-8">
+                All images are public domain scans via Wikimedia Commons.
+            </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto border-t border-gray-200 pt-12 mb-12">
+            <h3 class="text-2xl font-semibold text-gray-900 mb-3">
+                Resources
+            </h3>
+            <p class="text-lg text-gray-600 leading-relaxed mb-8">
+                Where to find map data for the Twin Cities, tools to make your
+                own maps, and some favorite reading.
+            </p>
+
+            {
+                resources.map((group) => (
+                    <div class="mb-10">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-4">
+                            {group.heading}
+                        </h4>
+                        <ul class="space-y-3 text-gray-600">
+                            {group.items.map((r) => (
+                                <li>
+                                    {r.url ? (
+                                        <a
+                                            href={r.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="font-semibold text-blue-600 hover:underline"
+                                        >
+                                            {r.name}
+                                        </a>
+                                    ) : (
+                                        <span class="font-semibold text-gray-900">
+                                            {r.name}
+                                        </span>
+                                    )}
+                                    <span class="block">{r.note}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
         </div>
     </div>
 </Layout>
