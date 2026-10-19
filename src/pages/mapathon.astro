@@ -4,18 +4,32 @@ import Layout from "../layouts/Layout.astro";
 // Public domain scans, via Wikimedia Commons. Local copies resized to 1000px.
 const historicalMaps = [
     {
+        img: "babylonian-world-map-600bce",
+        commons: "Babylonian Map of the World, 700-500 BC.jpg",
+        title: "Babylonian Map of the World",
+        meta: "Sippar, Mesopotamia · c. 600 BCE",
+        note: "The oldest known map of the world, on a clay tablet: Babylon and the Euphrates at the center, ringed by a \u201cbitter river\u201d ocean, with mythic lands pointing outward like a star.",
+    },
+    {
+        img: "turin-papyrus-1150bce",
+        commons: "Turin Papyrus (geological map) - Museo Egizio Turin C 1879 1969 1899 p01.jpg",
+        title: "Turin Papyrus Map",
+        meta: "Egypt · c. 1150 BCE",
+        note: "Drawn by the scribe Amennakhte for a quarrying expedition under Ramesses IV. Pink hills, roads, a gold mine, and the stone quarry make it the oldest surviving geological map.",
+    },
+    {
+        img: "yu-ji-tu-1136",
+        commons: "Yuji tu - BEFEO.png",
+        title: "Yu Ji Tu (Map of the Tracks of Yu)",
+        meta: "Song dynasty China · 1136",
+        note: "Carved in stone on a grid where each square is 100 li. China's rivers and coast are startlingly accurate, centuries before Europe drew to scale on a grid.",
+    },
+    {
         img: "tabula-rogeriana-1154",
         commons: "TabulaRogeriana.jpg",
         title: "Tabula Rogeriana",
         meta: "Muhammad al-Idrisi · 1154",
         note: "Drawn for Roger II of Sicily from Arab, Greek, and travelers' accounts, with south at the top. For three centuries it was among the most accurate world maps anywhere. Shown in Konrad Miller's 1928 reconstruction.",
-    },
-    {
-        img: "hereford-mappa-mundi-1300",
-        commons: "Hereford-Karte.jpg",
-        title: "Hereford Mappa Mundi",
-        meta: "England · c. 1300",
-        note: "The largest surviving medieval world map, on a single calfskin. Jerusalem sits at the center and east is at the top; it maps belief, history, and monsters as much as geography.",
     },
     {
         img: "catalan-atlas-1375",
@@ -39,6 +53,20 @@ const historicalMaps = [
         note: "The first map to print the name “America.” The Library of Congress bought the only known copy for $10 million and calls it America's birth certificate.",
     },
     {
+        img: "piri-reis-1513",
+        commons: "Piri reis world map 01.jpg",
+        title: "Piri Reis Map",
+        meta: "Ottoman Empire · 1513",
+        note: "The Ottoman admiral Piri Reis compiled it on gazelle skin from some twenty sources, including a now-lost map by Columbus. It is one of the earliest surviving maps to show the Americas.",
+    },
+    {
+        img: "codex-mendoza-1541",
+        commons: "Codex Mendoza folio 2r.jpg",
+        title: "Founding of Tenochtitlan, Codex Mendoza",
+        meta: "Mexica painters, New Spain · c. 1541",
+        note: "Part map, part history: the island city split into four quarters by canals, with the eagle on the cactus at its heart. That eagle is on Mexico's flag today.",
+    },
+    {
         img: "mercator-1569",
         commons: "Mercator 1569 world map composite.jpg",
         title: "Nova et Aucta Orbis Terrae",
@@ -58,6 +86,41 @@ const historicalMaps = [
         title: "La Pianta Grande di Roma",
         meta: "Giambattista Nolli · 1748",
         note: "Twelve engraved plates that render public interiors (churches, courtyards) as white like the streets, and private buildings as dark. Architects still use “Nolli maps” to show public space.",
+    },
+    {
+        img: "tupaia-chart-1769",
+        commons: "Tupaia's map, c. 1769.jpg",
+        title: "Tupaia's Chart",
+        meta: "Tupaia of Ra\u02bbiātea, with Cook's crew · 1769",
+        note: "A Polynesian navigator-priest mapped dozens of Pacific islands for the Endeavour. Scholars now read it as a map of sailing relationships from where you stand, not a grid seen from above.",
+    },
+    {
+        img: "jambudvipa-1800",
+        commons: "Jain Cosmological Map of the Universe - Jambudvipa.jpg",
+        title: "Jambudvipa",
+        meta: "Jain cosmological painting, India · c. 1800",
+        note: "Concentric continents and oceans around Mount Meru, the world of humans in Jain cosmology. A reminder that maps can chart a belief as precisely as a coastline.",
+    },
+    {
+        img: "smith-geology-1815",
+        commons: "Geological map Britain William Smith 1815.jpg",
+        title: "A Delineation of the Strata of England and Wales",
+        meta: "William Smith · 1815",
+        note: "The first geological map of an entire country, hand-colored rock layer by rock layer by a self-taught canal surveyor. Simon Winchester called it the map that changed the world.",
+    },
+    {
+        img: "ino-japan-1821",
+        commons: "1878 Meiji 11 Ino Tadataka Japanese Military Map of Japan - Geographicus - Japan-ino-1878.jpg",
+        title: "Maps of Japan's Coastline",
+        meta: "Inō Tadataka · surveyed 1800–1816 (this edition 1878)",
+        note: "A retired merchant began surveying at 55 and walked about 35,000 km of coast. His maps stayed Japan's standard for decades; this Meiji military edition is built on them.",
+    },
+    {
+        img: "dupin-instruction-1826",
+        commons: "Carte figurative de l'instruction populaire de la France - Collon, del. - btv1b530830640.jpg",
+        title: "Carte figurative de l'instruction populaire",
+        meta: "Charles Dupin · 1826",
+        note: "The first choropleth map: French departments shaded darker where fewer children went to school. Every county-by-county map you have ever seen descends from this one.",
     },
     {
         img: "nicollet-upper-mississippi-1843",
@@ -81,11 +144,32 @@ const historicalMaps = [
         note: "Six variables on one sheet: army size, latitude and longitude, direction, temperature, and dates. Edward Tufte called it possibly the best statistical graphic ever drawn.",
     },
     {
+        img: "ammassalik-wooden-maps-1885",
+        commons: "Holm1887p250 Trækort.png",
+        title: "Ammassalik Wooden Maps",
+        meta: "Kunit, Tasiilaq, Greenland · c. 1885",
+        note: "Carved driftwood coastlines, read by touch. They work in the dark and in mittens, and they float if you drop them from a kayak. Shown in the 1887 drawing from Gustav Holm's expedition report.",
+    },
+    {
+        img: "sanborn-minneapolis-1885",
+        commons: "Sanborn Fire Insurance Map from Minneapolis, Hennepin County, Minnesota, Volume 2, 1885, Plate 0057L.jpg",
+        title: "Sanborn Fire Insurance Map of Minneapolis",
+        meta: "Sanborn Map Company · 1885",
+        note: "St. Anthony Falls, Hennepin Island, and the Pillsbury A Mill, drawn building by building. Colors code construction (pink for brick, yellow for wood) so insurers could price fire risk.",
+    },
+    {
         img: "booth-poverty-1898",
         commons: "London Poverty Map, 1898-9 - Sheet 01 - eastern district - lse-library-yzrdcOgEs6c-unsplash.jpg",
         title: "Map Descriptive of London Poverty",
         meta: "Charles Booth · 1898–99",
         note: "Every street colored by household income in seven classes, from black (“lowest class”) to yellow (“wealthy”), built from street-by-street survey work. A direct ancestor of today's choropleth. Shown: the East End sheet.",
+    },
+    {
+        img: "marshall-stick-chart",
+        commons: "Marshall Islands stick chart, Rebbelib type. LOC 2010586182.jpg",
+        title: "Marshall Islands Stick Chart",
+        meta: "Marshall Islands · tradition centuries old (this example c. 1920)",
+        note: "Palm ribs trace how ocean swells bend around islands, and shells mark the islands. Navigators memorized the charts on land and read the waves with their bodies at sea.",
     },
 ];
 
@@ -398,11 +482,12 @@ const resources = [
         <div class="border-t border-gray-200 pt-12 mb-16">
             <div class="max-w-4xl mx-auto mb-8">
                 <h3 class="text-2xl font-semibold text-gray-900 mb-3">
-                    Twelve Maps That Changed How We See
+                    Twenty-Four Maps That Changed How We See
                 </h3>
                 <p class="text-lg text-gray-600 leading-relaxed">
-                    A short, opinionated tour of public domain maps, from
-                    medieval world pictures to the first maps of data. Click
+                    A short, opinionated tour of public domain maps from all
+                    over the world, from a Babylonian clay tablet to the first
+                    maps of data. Click
                     any map for the full-resolution scan.
                 </p>
             </div>
